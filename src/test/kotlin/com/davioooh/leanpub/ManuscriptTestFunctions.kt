@@ -1,4 +1,4 @@
-package com.davioooh
+package com.davioooh.leanpub
 
 import java.nio.file.Path
 
@@ -11,7 +11,11 @@ fun createManuscriptTestFolder(bookRootFolder: Path): Path {
 
 fun createTestChapter(manuscriptFolder: Path, chapterNum: Int) {
 
-    val testCh = manuscriptFolder.resolve(testFileNameFrom(chapterNum)).toFile()
+    val testCh = manuscriptFolder.resolve(
+        testFileNameFrom(
+            chapterNum
+        )
+    ).toFile()
     testCh.createNewFile()
     testCh.printWriter().use { out ->
         out.println("# Chapter $chapterNum")

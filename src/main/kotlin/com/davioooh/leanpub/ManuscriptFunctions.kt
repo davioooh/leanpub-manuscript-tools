@@ -1,4 +1,4 @@
-package com.davioooh
+package com.davioooh.leanpub
 
 import java.io.File
 import java.nio.file.Path

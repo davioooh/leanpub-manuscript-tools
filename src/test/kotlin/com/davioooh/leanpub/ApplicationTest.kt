@@ -1,4 +1,4 @@
-package com.davioooh
+package com.davioooh.leanpub
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeAll
@@ -35,5 +35,12 @@ class ApplicationTest {
                         "ch03.txt"
                 ))
     }
+
+//    @Test
+//    fun `should generate Book-txt with 3 chapters`() {
+//        val fileNames = generateBookTxtFromChapters(listOf(""))
+//        val bookTxtContent = ""
+//        assertThat(bookTxtContent).isEqualTo("ggggg")
+//    }
 
 }
