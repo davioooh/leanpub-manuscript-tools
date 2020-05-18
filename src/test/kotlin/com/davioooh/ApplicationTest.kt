@@ -11,19 +11,21 @@ import java.nio.file.Path
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class ApplicationTest {
 
-    private lateinit var manuscriptTestPath: Path
+    private lateinit var testBookRootPath: Path
+    private lateinit var testManuscriptPath: Path
 
     @BeforeAll
     fun setup(@TempDir testRootFolder: Path) {
-        manuscriptTestPath = createManuscriptTestFolder(testRootFolder)
-        createTestChapter(manuscriptTestPath, 1)
-        createTestChapter(manuscriptTestPath, 2)
-        createTestChapter(manuscriptTestPath, 3)
+        testBookRootPath = testRootFolder
+        testManuscriptPath = createManuscriptTestFolder(testRootFolder)
+        createTestChapter(testManuscriptPath, 1)
+        createTestChapter(testManuscriptPath, 2)
+        createTestChapter(testManuscriptPath, 3)
     }
 
     @Test
     fun `should find 3 chapters in manuscript folder`() {
-        val chapters = listAllChapters(manuscriptTestPath.toString())
+        val chapters = listAllChapters(testBookRootPath)
 
         assertThat(chapters).hasSize(3)
         assertThat(chapters.map { it.name })
