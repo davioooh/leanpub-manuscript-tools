@@ -20,6 +20,12 @@ class ApplicationTest {
             "ch03.txt"
     )
 
+    private val test3MdChapters = listOf(
+        "ch01.md",
+        "ch02.md",
+        "ch03.md"
+    )
+
     private val chaptersIndex = StringBuilder()
             .apply { test3Chapters.map { this.append("$it\r\n") } }
             .toString()
@@ -46,6 +52,12 @@ class ApplicationTest {
     fun `should generate Book-txt with 3 chapters`() {
         val bookTxt = generateBookTxtFromChapters(testBookRootPath, test3Chapters)
         assertThat(bookTxt.readText()).isEqualTo(chaptersIndex)
+    }
+
+    @Test
+    fun `should convert TXT chapters to MD`() {
+        val mdChapters = convertTxtChaptersToMd(testBookRootPath)
+        assertThat(mdChapters.map { it.name }).isEqualTo(test3MdChapters)
     }
 
 }

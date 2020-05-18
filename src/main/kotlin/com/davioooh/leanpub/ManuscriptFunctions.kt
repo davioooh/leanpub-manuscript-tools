@@ -5,33 +5,45 @@ import java.nio.file.Path
 
 const val MANUSCRIPT_FOLDER = "manuscript"
 const val TXT_EXT = "txt"
+const val MD_EXT = "md"
 const val CHAPTER_PREFIX = "ch"
 
 fun listAllChapters(bookRootPath: Path): List<File> =
-        bookRootPath
-                .resolve(MANUSCRIPT_FOLDER)
-                .toFile()
-                .listFiles { file ->
-                    file.isFile
-                            && file.nameWithoutExtension.startsWith(CHAPTER_PREFIX, true)
-                            && file.extension.toLowerCase() == TXT_EXT
-                }?.toList()?.sortedBy { it.name } ?: listOf()
+    listChaptersWithExtension(bookRootPath, TXT_EXT)
 
 fun generateBookTxtFromChapters(bookRootPath: Path, chaptersFileNames: List<String>): File {
-    val bookTxt = bookRootPath
-            .resolve(MANUSCRIPT_FOLDER)
-            .resolve("Book.txt")
-            .toFile()
+    val bookTxt = manuscriptPath(bookRootPath)
+        .resolve("Book.txt")
+        .toFile()
 
     if (bookTxt.exists()) bookTxt.delete()
 
     return bookTxt
-            .apply { createNewFile() }
-            .apply {
-                printWriter().use { writer ->
-                    chaptersFileNames.forEach { fileName ->
-                        writer.println(fileName)
-                    }
+        .apply { createNewFile() }
+        .apply {
+            printWriter().use { writer ->
+                chaptersFileNames.forEach { fileName ->
+                    writer.println(fileName)
                 }
             }
+        }
 }
+
+private fun manuscriptPath(bookRootPath: Path) =
+    bookRootPath.resolve(MANUSCRIPT_FOLDER)
+
+private fun listChaptersWithExtension(bookRootPath: Path, extension: String) =
+    manuscriptPath(bookRootPath)
+        .toFile()
+        .listFiles { file ->
+            file.isFile
+                    && file.nameWithoutExtension.startsWith(CHAPTER_PREFIX, true)
+                    && file.extension.toLowerCase() == extension
+        }?.toList()?.sortedBy { it.name } ?: listOf()
+
+fun convertTxtChaptersToMd(bookRootPath: Path): List<File> =
+    listChaptersWithExtension(bookRootPath, TXT_EXT)
+        .map { txtFile ->
+            File(txtFile.parentFile, "${txtFile.nameWithoutExtension}.$MD_EXT")
+                .apply { txtFile.renameTo(this) }
+        }
