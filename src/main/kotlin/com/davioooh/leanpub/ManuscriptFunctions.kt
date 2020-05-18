@@ -29,6 +29,20 @@ fun generateBookTxtFromChapters(bookRootPath: Path, chaptersFileNames: List<Stri
         }
 }
 
+fun convertTxtChaptersToMd(bookRootPath: Path): List<File> =
+    listChaptersWithExtension(bookRootPath, TXT_EXT)
+        .map { txtFile ->
+            txtFile.withExtension(MD_EXT)
+                .apply { txtFile.renameTo(this) }
+        }
+
+fun convertMdChaptersToTxt(bookRootPath: Path): List<File> =
+    listChaptersWithExtension(bookRootPath, MD_EXT)
+        .map { mdFile ->
+            mdFile.withExtension(TXT_EXT)
+                .apply { mdFile.renameTo(this) }
+        }
+
 private fun manuscriptPath(bookRootPath: Path) =
     bookRootPath.resolve(MANUSCRIPT_FOLDER)
 
@@ -41,9 +55,5 @@ private fun listChaptersWithExtension(bookRootPath: Path, extension: String) =
                     && file.extension.toLowerCase() == extension
         }?.toList()?.sortedBy { it.name } ?: listOf()
 
-fun convertTxtChaptersToMd(bookRootPath: Path): List<File> =
-    listChaptersWithExtension(bookRootPath, TXT_EXT)
-        .map { txtFile ->
-            File(txtFile.parentFile, "${txtFile.nameWithoutExtension}.$MD_EXT")
-                .apply { txtFile.renameTo(this) }
-        }
+private fun File.withExtension(targetExtension: String) =
+    File(this.parentFile, "${this.nameWithoutExtension}.$targetExtension")

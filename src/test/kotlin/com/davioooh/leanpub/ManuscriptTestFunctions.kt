@@ -9,9 +9,9 @@ fun createManuscriptTestFolder(bookRootFolder: Path): Path {
     return manuscriptPath
 }
 
-fun createTestChapter(manuscriptFolder: Path, chapterNum: Int): Unit =
+fun createFakeChapterFile(manuscriptFolder: Path, chapterNum: Int, fileExt: String): Unit =
     manuscriptFolder
-        .resolve(testFileNameFrom(chapterNum))
+        .resolve(testFileNameFrom(chapterNum, fileExt))
         .toFile()
         .apply { createNewFile() }
         .let {
@@ -25,5 +25,10 @@ fun createTestChapter(manuscriptFolder: Path, chapterNum: Int): Unit =
         }
 
 // TODO optimize file name creation
-fun testFileNameFrom(chapterNum: Int) =
-    "${CHAPTER_PREFIX}0$chapterNum.$TXT_EXT"
+fun testFileNameFrom(chapterNum: Int, fileExt: String) =
+    "${CHAPTER_PREFIX}0$chapterNum.$fileExt"
+
+fun setupFakeChapters(manuscriptPath: Path, numberOfChapters: Int = 3, chaptersExt: String = TXT_EXT) =
+    repeat(numberOfChapters) {
+        createFakeChapterFile(manuscriptPath, it + 1, chaptersExt)
+    }
