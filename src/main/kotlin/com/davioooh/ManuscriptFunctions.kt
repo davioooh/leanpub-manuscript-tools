@@ -12,4 +12,4 @@ fun listAllChapters(path: String): List<File> =
                     file.isFile
                             && file.nameWithoutExtension.startsWith(CHAPTER_PREFIX, true)
                             && file.extension.toLowerCase() == TXT_EXT
-                }?.toList() ?: listOf()
+                }?.toList()?.sortedBy { it.name } ?: listOf()
