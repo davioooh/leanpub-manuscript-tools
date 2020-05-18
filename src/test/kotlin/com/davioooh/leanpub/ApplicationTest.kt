@@ -14,6 +14,17 @@ class ApplicationTest {
     private lateinit var testBookRootPath: Path
     private lateinit var testManuscriptPath: Path
 
+    private val test3Chapters = listOf(
+            "ch01.txt",
+            "ch02.txt",
+            "ch03.txt"
+    )
+
+    private val chaptersIndex = StringBuilder()
+            .apply { test3Chapters.map { this.append("$it\r\n") } }
+            .toString()
+
+
     @BeforeAll
     fun setup(@TempDir testRootFolder: Path) {
         testBookRootPath = testRootFolder
@@ -28,19 +39,13 @@ class ApplicationTest {
         val chapters = listAllChapters(testBookRootPath)
 
         assertThat(chapters).hasSize(3)
-        assertThat(chapters.map { it.name })
-                .isEqualTo(listOf(
-                        "ch01.txt",
-                        "ch02.txt",
-                        "ch03.txt"
-                ))
+        assertThat(chapters.map { it.name }).isEqualTo(test3Chapters)
     }
 
-//    @Test
-//    fun `should generate Book-txt with 3 chapters`() {
-//        val fileNames = generateBookTxtFromChapters(listOf(""))
-//        val bookTxtContent = ""
-//        assertThat(bookTxtContent).isEqualTo("ggggg")
-//    }
+    @Test
+    fun `should generate Book-txt with 3 chapters`() {
+        val bookTxt = generateBookTxtFromChapters(testBookRootPath, test3Chapters)
+        assertThat(bookTxt.readText()).isEqualTo(chaptersIndex)
+    }
 
 }
