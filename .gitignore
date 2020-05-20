@@ -1,5 +1,10 @@
+# Maven files
 target/
 !.mvn/wrapper/maven-wrapper.jar
+
+# Gradle files
+.gradle
+build/
 
 ### STS ###
 .apt_generated
@@ -14,6 +19,7 @@ target/
 *.iws
 *.iml
 *.ipr
+out/
 
 ### NetBeans ###
 nbproject/private/
