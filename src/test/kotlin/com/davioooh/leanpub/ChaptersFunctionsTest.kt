@@ -50,11 +50,9 @@ internal class ChaptersFunctionsTest {
 
     @Test
     fun `should generate Book-txt with 3 chapters`() {
-        testBook.createManuscriptFolder().withFakeChapters(3)
-
         val bookTxt = generateBookTxtFromChapters(testBook.bookRootFolder, expected3Chapters)
 
-        assertThat(bookTxt.readText()).isEqualTo(expectedChaptersIndex)
+        assertThat(bookTxt.readText()).isEqualTo(expectedChaptersIndex + "fdsfdsfds")
     }
 
     @Test
