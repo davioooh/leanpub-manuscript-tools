@@ -14,14 +14,20 @@ repositories {
 ext{
     junitVersion = '5.6.2'
     assertjVersion = '3.16.1'
+    cliktVersion = '2.7.1'
 }
 
 dependencies {
     implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    implementation("com.github.ajalt:clikt:$cliktVersion")
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
     testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
     testImplementation "org.assertj:assertj-core:$assertjVersion"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_1_8
 }
 
 test {
