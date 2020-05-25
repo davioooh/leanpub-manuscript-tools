@@ -14,7 +14,7 @@ internal class LPToolsTest {
     private val lpTools = LPTools().subcommands(DummyCommand())
 
     @Test
-    fun `running with not child command should print help`() {
+    fun `running with no child command should print help`() {
         assertThatThrownBy {
             lpTools.parse(arrayOf())
         }.isInstanceOf(PrintHelpMessage::class.java)
