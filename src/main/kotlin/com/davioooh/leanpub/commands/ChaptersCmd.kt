@@ -8,7 +8,7 @@ import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.output.CliktConsole
 
-class Chapters : NoOpCliktCommand() {
+class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
     override fun aliases(): Map<String, List<String>> = mapOf(
             "lf" to listOf(LIST_FILE_CMD_NAME)
     )
@@ -27,6 +27,7 @@ class Chapters : NoOpCliktCommand() {
     }
 
     companion object {
+        const val CHAPTERS_CMD_NAME = "chapters"
         const val LIST_FILE_CMD_NAME = "list-files"
         const val LIST_FILES_HELP_MSG = "List all chapters in manuscript folder"
     }

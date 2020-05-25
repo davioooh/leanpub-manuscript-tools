@@ -10,13 +10,13 @@ import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import java.io.File
 
-internal class ChaptersTest {
+internal class ChaptersCmdTest {
 
     private val fakeFiles = listOf(File("ch01.txt"), File("ch02.txt"), File("ch03.txt"))
     private val expectedFileNames = fakeFiles.joinToString(LINE_SEPARATOR, postfix = LINE_SEPARATOR)
 
     private val lpTools = LPTools()
-            .subcommands(Chapters().subcommands(Chapters.ListFiles(TestConsole) { fakeFiles }))
+            .subcommands(ChaptersCmd().subcommands(ChaptersCmd.ListFiles(TestConsole) { fakeFiles }))
 
     @Test
     fun `running with no child command should print help`() {
