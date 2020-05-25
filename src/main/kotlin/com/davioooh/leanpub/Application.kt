@@ -1,7 +1,7 @@
 package com.davioooh.leanpub
 
 import com.davioooh.leanpub.commands.Chapters
-import com.davioooh.leanpub.commands.Chapters.GetList
+import com.davioooh.leanpub.commands.Chapters.ListFiles
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.findOrSetObject
 import com.github.ajalt.clikt.core.subcommands
@@ -30,5 +30,6 @@ class LPTools : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_
 
 fun main(args: Array<String>) =
         LPTools()
-                .subcommands(Chapters().subcommands(GetList()))
+                .subcommands(Chapters()
+                        .subcommands(ListFiles(listFilesFun = ::listAllChapterFiles)))
                 .main(args)

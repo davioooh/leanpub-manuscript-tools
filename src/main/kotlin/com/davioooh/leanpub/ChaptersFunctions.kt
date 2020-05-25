@@ -54,3 +54,5 @@ fun listChapterFilesWithExtension(bookRootPath: Path, extension: String): List<F
 
 private fun File.withExtension(targetExtension: String): File =
         File(this.parentFile, "${this.nameWithoutExtension}.$targetExtension")
+
+typealias ListFilesFun = (Path) -> List<File>

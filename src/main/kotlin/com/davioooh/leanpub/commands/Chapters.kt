@@ -1,31 +1,34 @@
 package com.davioooh.leanpub.commands
 
-import com.davioooh.leanpub.listAllChapters
+import com.davioooh.leanpub.LPTools
+import com.davioooh.leanpub.ListFilesFun
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.NoOpCliktCommand
-import com.github.ajalt.clikt.parameters.options.default
-import com.github.ajalt.clikt.parameters.options.option
-import com.github.ajalt.clikt.parameters.types.path
-import java.nio.file.Path
+import com.github.ajalt.clikt.core.context
+import com.github.ajalt.clikt.core.requireObject
+import com.github.ajalt.clikt.output.CliktConsole
 
 class Chapters : NoOpCliktCommand() {
     override fun aliases(): Map<String, List<String>> = mapOf(
-            "ls" to listOf("list")
+            "lf" to listOf(LIST_FILE_CMD_NAME)
     )
 
-    class GetList : CliktCommand(name = "list", help = GET_LIST_HELP_MSG) {
+    class ListFiles(customConsole: CliktConsole? = null, val listFilesFun: ListFilesFun) :
+            CliktCommand(name = LIST_FILE_CMD_NAME, help = LIST_FILES_HELP_MSG) {
+        private val config by requireObject<LPTools.Config>()
 
-        private val bookFolder by option("-bf", "--book-folder", help = BOOK_FOLDER_OPT_HELP_MSG).path()
-                .default(Path.of("."))
+        init {
+            if (customConsole != null) context { this.console = customConsole }
+        }
 
         override fun run() {
-            listAllChapters(bookFolder).map { it.name }.forEach { echo(it) }
+            listFilesFun(config.bookFolder!!).map { it.name }.forEach { echo(it) }
         }
     }
 
     companion object {
-        const val GET_LIST_HELP_MSG = "List all chapters in manuscript folder"
-        const val BOOK_FOLDER_OPT_HELP_MSG = "The root folder of the book (containing the manuscript/ folder)"
+        const val LIST_FILE_CMD_NAME = "list-files"
+        const val LIST_FILES_HELP_MSG = "List all chapters in manuscript folder"
     }
 
 }
