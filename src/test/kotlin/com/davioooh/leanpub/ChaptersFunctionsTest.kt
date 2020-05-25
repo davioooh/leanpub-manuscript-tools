@@ -12,21 +12,21 @@ import java.nio.file.Path
 internal class ChaptersFunctionsTest {
     private lateinit var testBook: TestBookFolder
 
-    private val expected3Chapters = listOf(
-        "ch01.txt",
-        "ch02.txt",
-        "ch03.txt"
+    private val expected3Files = listOf(
+            "ch01.txt",
+            "ch02.txt",
+            "ch03.txt"
     )
 
-    private val expected3MdChapters = listOf(
-        "ch01.md",
-        "ch02.md",
-        "ch03.md"
+    private val expected3MdFiles = listOf(
+            "ch01.md",
+            "ch02.md",
+            "ch03.md"
     )
 
-    private val expectedChaptersIndex = StringBuilder()
-        .apply { expected3Chapters.map { this.append("$it\r\n") } }
-        .toString()
+    private val expectedBookTxt = StringBuilder()
+            .apply { expected3Files.map { this.append("$it\r\n") } }
+            .toString()
 
     @BeforeAll
     fun setup(@TempDir testRootFolder: Path) {
@@ -39,40 +39,46 @@ internal class ChaptersFunctionsTest {
     }
 
     @Test
-    fun `should find 3 chapters in manuscript folder`() {
-        testBook.createManuscriptFolder().withFakeChapters(3)
+    fun `should find 3 chapter files in manuscript folder`() {
+        testBook.createManuscriptFolder()
+                .withFakeChapters(3)
+                .withFakeBookTxt()
+                .withFile("ch04_test.pdf")
 
         val chapters = listAllChapterFiles(testBook.bookRootFolder)
 
         assertThat(chapters).hasSize(3)
-        assertThat(chapters.map { it.name }).isEqualTo(expected3Chapters)
+        assertThat(chapters.map { it.name }).isEqualTo(expected3Files)
     }
 
     @Test
-    fun `should generate Book-txt with 3 chapters`() {
+    fun `should generate Book_txt with 3 chapter files`() {
         testBook.createManuscriptFolder()
 
-        val bookTxt = generateBookTxtFromFileNames(testBook.bookRootFolder, expected3Chapters)
+        val bookTxt = generateBookTxtFromFileNames(testBook.bookRootFolder, expected3Files)
 
-        assertThat(bookTxt.readText()).isEqualTo(expectedChaptersIndex)
+        assertThat(bookTxt.readText()).isEqualTo(expectedBookTxt)
     }
 
     @Test
     fun `should convert TXT chapters to MD`() {
-        testBook.createManuscriptFolder().withFakeChapters(3)
+        testBook.createManuscriptFolder()
+                .withFakeChapters(3)
+                .withFakeBookTxt()
+                .withFile("ch04_test.pdf")
 
-        val mdChapters = convertTxtChaptersToMd(testBook.bookRootFolder)
+        val mdChapters = convertTxtChapterFilesToMd(testBook.bookRootFolder)
 
-        assertThat(mdChapters.map { it.name }).isEqualTo(expected3MdChapters)
+        assertThat(mdChapters.map { it.name }).isEqualTo(expected3MdFiles)
     }
 
     @Test
     fun `should convert MD chapters to TXT`() {
-        testBook.createManuscriptFolder().withFakeChapters(3, chaptersExt = MD_EXT)
+        testBook.createManuscriptFolder().withFakeChapters(3, filesExt = MD_EXT)
 
-        val txtChapters = convertMdChaptersToTxt(testBook.bookRootFolder)
+        val txtChapters = convertMdChapterFilesToTxt(testBook.bookRootFolder)
 
-        assertThat(txtChapters.map { it.name }).isEqualTo(expected3Chapters)
+        assertThat(txtChapters.map { it.name }).isEqualTo(expected3Files)
     }
 
 }

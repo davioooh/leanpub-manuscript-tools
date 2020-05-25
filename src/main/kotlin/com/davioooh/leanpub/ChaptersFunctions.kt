@@ -29,14 +29,14 @@ fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<Str
             }
 }
 
-fun convertTxtChaptersToMd(bookRootPath: Path): List<File> =
+fun convertTxtChapterFilesToMd(bookRootPath: Path): List<File> =
         listChapterFilesWithExtension(bookRootPath, TXT_EXT)
                 .map { txtFile ->
                     txtFile.withExtension(MD_EXT)
                             .apply { txtFile.renameTo(this) }
                 }
 
-fun convertMdChaptersToTxt(bookRootPath: Path): List<File> =
+fun convertMdChapterFilesToTxt(bookRootPath: Path): List<File> =
         listChapterFilesWithExtension(bookRootPath, MD_EXT)
                 .map { mdFile ->
                     mdFile.withExtension(TXT_EXT)
