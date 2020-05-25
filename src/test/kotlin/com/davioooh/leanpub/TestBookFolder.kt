@@ -39,5 +39,5 @@ class TestBookFolder(val bookRootFolder: Path) {
 
     // TODO optimize file name creation
     private fun testFileNameFrom(chapterNum: Int, fileExt: String) =
-        "${CHAPTER_PREFIX}0$chapterNum.$fileExt"
+        "${CHAPTER_FILE_NAME_PREFIX}0$chapterNum.$fileExt"
 }

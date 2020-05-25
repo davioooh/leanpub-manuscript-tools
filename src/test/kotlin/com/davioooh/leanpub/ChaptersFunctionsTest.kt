@@ -42,7 +42,7 @@ internal class ChaptersFunctionsTest {
     fun `should find 3 chapters in manuscript folder`() {
         testBook.createManuscriptFolder().withFakeChapters(3)
 
-        val chapters = listAllChapters(testBook.bookRootFolder)
+        val chapters = listAllChapterFiles(testBook.bookRootFolder)
 
         assertThat(chapters).hasSize(3)
         assertThat(chapters.map { it.name }).isEqualTo(expected3Chapters)
@@ -52,7 +52,7 @@ internal class ChaptersFunctionsTest {
     fun `should generate Book-txt with 3 chapters`() {
         testBook.createManuscriptFolder()
 
-        val bookTxt = generateBookTxtFromChapters(testBook.bookRootFolder, expected3Chapters)
+        val bookTxt = generateBookTxtFromFileNames(testBook.bookRootFolder, expected3Chapters)
 
         assertThat(bookTxt.readText()).isEqualTo(expectedChaptersIndex)
     }
