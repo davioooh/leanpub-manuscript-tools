@@ -24,9 +24,7 @@ internal class ChaptersFunctionsTest {
             "ch03.md"
     )
 
-    private val expectedBookTxt = StringBuilder()
-            .apply { expected3Files.map { this.append("$it\r\n") } }
-            .toString()
+    private val expectedBookTxt = expected3Files.joinToString(LINE_SEPARATOR, postfix = LINE_SEPARATOR)
 
     @BeforeAll
     fun setup(@TempDir testRootFolder: Path) {
