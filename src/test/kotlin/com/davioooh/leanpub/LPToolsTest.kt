@@ -1,5 +1,6 @@
 package com.davioooh.leanpub
 
+import com.davioooh.leanpub.commands.Chapters
 import com.github.ajalt.clikt.core.subcommands
 import org.junit.jupiter.api.Test
 
