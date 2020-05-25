@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'com.davioooh.leanpub'
-version = '1.0-SNAPSHOT'
+version = '0.1.0-SNAPSHOT'
 description = 'leanpub-manuscript-tools'
 
 repositories {
