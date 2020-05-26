@@ -4,9 +4,11 @@ import com.davioooh.leanpub.LINE_SEPARATOR
 import com.davioooh.leanpub.LPTools
 import com.davioooh.leanpub.TestConsole
 import com.github.ajalt.clikt.core.PrintHelpMessage
+import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -16,7 +18,13 @@ internal class ChaptersCmdTest {
     private val expectedFileNames = fakeFiles.joinToString(LINE_SEPARATOR, postfix = LINE_SEPARATOR)
 
     private val lpTools = LPTools()
-            .subcommands(ChaptersCmd().subcommands(ChaptersCmd.ListFiles(TestConsole) { fakeFiles }))
+            .subcommands(ChaptersCmd()
+                    .subcommands(ChaptersCmd.ListFiles { fakeFiles }.apply { context { console= TestConsole } }))
+
+    @BeforeEach
+    fun setup(){
+        TestConsole.clear()
+    }
 
     @Test
     fun `running with no child command should print help`() {
@@ -30,6 +38,5 @@ internal class ChaptersCmdTest {
         lpTools.parse(arrayOf("chapters", "lf"))
         assertThat(TestConsole.output.toString()).isEqualTo(expectedFileNames)
     }
-
 
 }

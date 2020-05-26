@@ -17,4 +17,9 @@ object TestConsole : CliktConsole {
     }
 
     override val lineSeparator: String get() = LINE_SEPARATOR
+
+    fun clear(){
+        output.clear()
+    }
+
 }
