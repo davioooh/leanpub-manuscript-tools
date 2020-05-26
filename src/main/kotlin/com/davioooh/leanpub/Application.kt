@@ -11,11 +11,11 @@ import com.github.ajalt.clikt.parameters.options.validate
 import com.github.ajalt.clikt.parameters.types.path
 import java.nio.file.Path
 
-class LPTools : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_EPILOG_MSG) {
+class LPTools(val resolveManuscriptPathFun: ResolveManuscriptPathFun) : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_EPILOG_MSG) {
     private val bookFolder by option("-bf", "--book-folder", help = BOOK_FOLDER_OPT_HELP_MSG).path()
             .default(Path.of("."))
             .validate {
-                require(resolveManuscriptPathOrNull(it) != null) { "Invalid book path: cannot find manuscript folder." }
+                require(resolveManuscriptPathFun(it) != null) { "Invalid book path: cannot find manuscript folder." }
             }
     private val config by findOrSetObject { Config() }
 
@@ -34,8 +34,14 @@ class LPTools : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_
 
 }
 
+/**
+ * Resolve the manuscript path, given the book root path.
+ * Returns null if the manuscript folder does not exist.
+ */
+typealias ResolveManuscriptPathFun = (Path) -> Path?
+
 fun main(args: Array<String>) =
-        LPTools()
+        LPTools(::resolveManuscriptPathOrNull)
                 .subcommands(ChaptersCmd()
-                        .subcommands(ListFiles(listFilesFun = ::listAllChapterFiles)))
+                        .subcommands(ListFiles(::listAllChapterFiles)))
                 .main(args)
