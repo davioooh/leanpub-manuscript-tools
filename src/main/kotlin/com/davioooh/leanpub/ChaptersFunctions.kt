@@ -1,6 +1,7 @@
 package com.davioooh.leanpub
 
 import java.io.File
+import java.nio.file.Files
 import java.nio.file.Path
 
 const val MANUSCRIPT_FOLDER = "manuscript"
@@ -12,7 +13,7 @@ fun listAllChapterFiles(bookRootPath: Path): List<File> =
         listChapterFilesWithExtension(bookRootPath, TXT_EXT)
 
 fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<String>): File {
-    val bookTxt = bookRootPath.resolve(MANUSCRIPT_FOLDER)
+    val bookTxt = resolveManuscriptPath(bookRootPath)
             .resolve("Book.txt")
             .toFile()
 
@@ -44,13 +45,20 @@ fun convertMdChapterFilesToTxt(bookRootPath: Path): List<File> =
                 }
 
 fun listChapterFilesWithExtension(bookRootPath: Path, extension: String): List<File> =
-        bookRootPath.resolve(MANUSCRIPT_FOLDER)
+        resolveManuscriptPath(bookRootPath)
                 .toFile()
                 .listFiles { file ->
                     file.isFile
                             && file.nameWithoutExtension.startsWith(CHAPTER_FILE_NAME_PREFIX, true)
                             && file.extension.toLowerCase() == extension
                 }?.toList()?.sortedBy { it.name } ?: listOf()
+
+fun resolveManuscriptPath(bookRootPath: Path): Path =
+        bookRootPath.resolve(MANUSCRIPT_FOLDER)
+                .also {
+                    if (!Files.exists(it))
+                        throw IllegalArgumentException("Invalid book path: cannot find manuscript folder.")
+                }
 
 private fun File.withExtension(targetExtension: String): File =
         File(this.parentFile, "${this.nameWithoutExtension}.$targetExtension")
