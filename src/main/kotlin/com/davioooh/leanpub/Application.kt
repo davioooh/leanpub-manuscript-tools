@@ -7,13 +7,18 @@ import com.github.ajalt.clikt.core.findOrSetObject
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.validate
 import com.github.ajalt.clikt.parameters.types.path
 import java.nio.file.Path
 
 class LPTools : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_EPILOG_MSG) {
     private val bookFolder by option("-bf", "--book-folder", help = BOOK_FOLDER_OPT_HELP_MSG).path()
             .default(Path.of("."))
+            .validate {
+                require(resolveManuscriptPathOrNull(it) != null) { "Invalid book path: cannot find manuscript folder." }
+            }
     private val config by findOrSetObject { Config() }
+
     override fun run() {
         config.bookFolder = bookFolder
     }
@@ -26,6 +31,7 @@ class LPTools : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_
     }
 
     data class Config(var bookFolder: Path? = null)
+
 }
 
 fun main(args: Array<String>) =

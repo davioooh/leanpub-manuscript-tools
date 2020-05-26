@@ -53,12 +53,13 @@ fun listChapterFilesWithExtension(bookRootPath: Path, extension: String): List<F
                             && file.extension.toLowerCase() == extension
                 }?.toList()?.sortedBy { it.name } ?: listOf()
 
-fun resolveManuscriptPath(bookRootPath: Path): Path =
+fun resolveManuscriptPathOrNull(bookRootPath: Path): Path? =
         bookRootPath.resolve(MANUSCRIPT_FOLDER)
-                .also {
-                    if (!Files.exists(it))
-                        throw IllegalArgumentException("Invalid book path: cannot find manuscript folder.")
-                }
+                .let { if (Files.exists(it)) it else null }
+
+fun resolveManuscriptPath(bookRootPath: Path): Path =
+        resolveManuscriptPathOrNull(bookRootPath)
+                ?: throw IllegalArgumentException("Invalid book path: cannot find manuscript folder.")
 
 private fun File.withExtension(targetExtension: String): File =
         File(this.parentFile, "${this.nameWithoutExtension}.$targetExtension")
