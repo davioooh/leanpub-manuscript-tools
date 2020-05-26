@@ -1,17 +1,18 @@
 package com.davioooh.leanpub.commands
 
 import com.davioooh.leanpub.LPTools
-import com.davioooh.leanpub.ListFilesFun
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.requireObject
+import java.io.File
+import java.nio.file.Path
 
 class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
     override fun aliases(): Map<String, List<String>> = mapOf(
             "lf" to listOf(LIST_FILE_CMD_NAME)
     )
 
-    class ListFiles(val listFilesFun: ListFilesFun) :
+    class ListFiles(val listFilesFun: ListChapterFilesFun) :
             CliktCommand(name = LIST_FILE_CMD_NAME, help = LIST_FILES_HELP_MSG) {
         private val config by requireObject<LPTools.Config>()
 
@@ -27,3 +28,8 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
     }
 
 }
+
+/**
+ * List manuscript chapter files, given the book root path
+ */
+typealias ListChapterFilesFun = (Path) -> List<File>

@@ -62,5 +62,3 @@ fun resolveManuscriptPath(bookRootPath: Path): Path =
 
 private fun File.withExtension(targetExtension: String): File =
         File(this.parentFile, "${this.nameWithoutExtension}.$targetExtension")
-
-typealias ListFilesFun = (Path) -> List<File>
