@@ -12,7 +12,7 @@ import java.nio.file.Path
 
 internal class LPToolsTest {
 
-    private val lpTools = LPTools { testManuscriptPath }.subcommands(DummyCommand())
+    private val lpTools = LPTools { TEST_MANUSCRIPT_PATH }.subcommands(DummyCommand())
     private val lpToolsWithInvalidBookFolder = LPTools { null }.subcommands(DummyCommand())
 
 
@@ -46,7 +46,7 @@ internal class LPToolsTest {
     fun `provided book folder should be set in command context`() {
         lpTools.parse(arrayOf("-bf=$TEST_BOOK_URL", "fake-cmd"))
         val config = lpTools.currentContext.findObject<Config>()!!
-        assertThat(config.bookFolder).isEqualTo(testBookPath)
+        assertThat(config.bookFolder).isEqualTo(TEST_BOOK_PATH)
     }
 
     @Test
