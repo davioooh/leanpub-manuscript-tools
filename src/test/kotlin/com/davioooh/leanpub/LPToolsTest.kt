@@ -12,10 +12,9 @@ import java.nio.file.Path
 
 internal class LPToolsTest {
 
+    private val lpTools = LPTools { testManuscriptPath }.subcommands(DummyCommand())
+    private val lpToolsWithInvalidBookFolder = LPTools { null }.subcommands(DummyCommand())
 
-    private val lpTools =
-            LPTools { testManuscriptPath }
-                    .subcommands(DummyCommand())
 
     @BeforeEach
     fun setup() {
@@ -26,6 +25,13 @@ internal class LPToolsTest {
     fun `running with no child command should print help`() {
         assertThatThrownBy {
             lpTools.parse(arrayOf())
+        }.isInstanceOf(PrintHelpMessage::class.java)
+    }
+
+    @Test
+    fun `running with no child command should print help -- also when book path is not valid`() {
+        assertThatThrownBy {
+            lpToolsWithInvalidBookFolder.parse(arrayOf())
         }.isInstanceOf(PrintHelpMessage::class.java)
     }
 
@@ -44,10 +50,9 @@ internal class LPToolsTest {
     }
 
     @Test
-    fun `should print out validation error if book folder is not valid`() {
+    fun `should print out usage error if book folder is not valid and a child cmd is invoked`() {
         assertThatThrownBy {
-            LPTools { null }.subcommands(DummyCommand())
-                    .parse(arrayOf("-bf=$TEST_BOOK_URL", "fake-cmd"))
+            lpToolsWithInvalidBookFolder.parse(arrayOf("-bf=$TEST_BOOK_URL", "fake-cmd"))
         }.isInstanceOf(UsageError::class.java)
     }
 
