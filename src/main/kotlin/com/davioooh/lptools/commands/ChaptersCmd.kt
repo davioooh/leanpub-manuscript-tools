@@ -1,6 +1,6 @@
-package com.davioooh.leanpub.commands
+package com.davioooh.lptools.commands
 
-import com.davioooh.leanpub.LPTools
+import com.davioooh.lptools.LPTools
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.requireObject

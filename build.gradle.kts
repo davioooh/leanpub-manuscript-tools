@@ -4,7 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm").version("1.3.72")
 }
 
-group = "com.davioooh.leanpub"
+group = "com.davioooh.lptools"
 version = "0.1.0-SNAPSHOT"
 description = "leanpub-manuscript-tools"
 
@@ -18,9 +18,9 @@ val assertjVersion = "3.16.1"
 val cliktVersion = "2.7.1"
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation(kotlin("stdlib"))
     implementation("com.github.ajalt:clikt:$cliktVersion")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation(kotlin("test-junit"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.assertj:assertj-core:$assertjVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")

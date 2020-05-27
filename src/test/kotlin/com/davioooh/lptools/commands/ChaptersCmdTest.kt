@@ -1,9 +1,9 @@
-package com.davioooh.leanpub.commands
+package com.davioooh.lptools.commands
 
-import com.davioooh.leanpub.LINE_SEPARATOR
-import com.davioooh.leanpub.LPTools
-import com.davioooh.leanpub.TEST_MANUSCRIPT_PATH
-import com.davioooh.leanpub.TestConsole
+import com.davioooh.lptools.LINE_SEPARATOR
+import com.davioooh.lptools.LPTools
+import com.davioooh.lptools.TEST_MANUSCRIPT_PATH
+import com.davioooh.lptools.TestConsole
 import com.github.ajalt.clikt.core.PrintHelpMessage
 import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands

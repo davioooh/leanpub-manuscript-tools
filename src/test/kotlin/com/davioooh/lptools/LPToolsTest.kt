@@ -1,6 +1,6 @@
-package com.davioooh.leanpub
+package com.davioooh.lptools
 
-import com.davioooh.leanpub.LPTools.Config
+import com.davioooh.lptools.LPTools.Config
 import com.github.ajalt.clikt.core.PrintHelpMessage
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.subcommands

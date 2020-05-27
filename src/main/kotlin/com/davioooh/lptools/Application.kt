@@ -1,7 +1,7 @@
-package com.davioooh.leanpub
+package com.davioooh.lptools
 
-import com.davioooh.leanpub.commands.ChaptersCmd
-import com.davioooh.leanpub.commands.ChaptersCmd.ListFiles
+import com.davioooh.lptools.commands.ChaptersCmd
+import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.findOrSetObject

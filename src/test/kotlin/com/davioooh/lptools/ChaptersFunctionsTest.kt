@@ -1,4 +1,4 @@
-package com.davioooh.leanpub
+package com.davioooh.lptools
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach

@@ -1,4 +1,4 @@
-package com.davioooh.leanpub
+package com.davioooh.lptools
 
 import java.io.File
 import java.nio.file.Path

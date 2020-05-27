@@ -1,4 +1,4 @@
-package com.davioooh.leanpub
+package com.davioooh.lptools
 
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.output.CliktConsole
