@@ -10,8 +10,6 @@ import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.choice
-import java.io.File
-import java.nio.file.Path
 
 class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
     override fun aliases(): Map<String, List<String>> = mapOf(
@@ -64,18 +62,3 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
     }
 
 }
-
-/**
- * List manuscript chapter files, given the book root path
- */
-typealias ListChapterFilesFun = (Path) -> List<File>
-
-/**
- * Rename manuscript chapter files from *.txt to *.md
- */
-typealias TxtToMdFun = (Path) -> List<File>
-
-/**
- * Rename manuscript chapter files from .md to .txt
- */
-typealias MdToTxtFun = (Path) -> List<File>

@@ -3,6 +3,7 @@ package com.davioooh.lptools
 import com.davioooh.lptools.commands.ChaptersCmd
 import com.davioooh.lptools.commands.ChaptersCmd.Convert
 import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
+import com.davioooh.lptools.commands.ResolveManuscriptPathFun
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.findOrSetObject
@@ -33,12 +34,6 @@ class LPTools(val resolveManuscriptPathFun: ResolveManuscriptPathFun) : CliktCom
     data class Config(var bookFolder: Path? = null)
 
 }
-
-/**
- * Resolve the manuscript path, given the book root path.
- * Returns null if the manuscript folder does not exist.
- */
-typealias ResolveManuscriptPathFun = (Path) -> Path?
 
 fun main(args: Array<String>) =
         LPTools(::resolveManuscriptPathOrNull).subcommands(
