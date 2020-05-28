@@ -13,13 +13,13 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.path
 import java.nio.file.Path
 
-class LPTools(val resolveManuscriptPathFun: ResolveManuscriptPathFun) : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_EPILOG_MSG) {
+class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_EPILOG_MSG) {
     private val bookFolder by option("-bf", "--book-folder", help = BOOK_FOLDER_OPT_HELP_MSG).path()
             .default(Path.of("."))
     private val config by findOrSetObject { Config() }
 
     override fun run() {
-        if (resolveManuscriptPathFun(bookFolder) == null)
+        if (resolveManuscriptPath(bookFolder) == null)
             throw UsageError("Invalid book path: cannot find manuscript folder in: $bookFolder")
         config.bookFolder = bookFolder
     }

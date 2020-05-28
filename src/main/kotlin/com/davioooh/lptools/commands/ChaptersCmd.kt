@@ -16,12 +16,12 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
             "lf" to listOf(LIST_FILE_CMD_NAME)
     )
 
-    class ListFiles(private val listFilesFun: ListChapterFilesFun) :
+    class ListFiles(private val listChapterFiles: ListChapterFilesFun) :
             CliktCommand(name = LIST_FILE_CMD_NAME, help = CMD_HELP_MSG) {
         private val config by requireObject<LPTools.Config>()
 
         override fun run() {
-            listFilesFun(config.bookFolder!!).map { it.name }.forEach { echo(it) }
+            listChapterFiles(config.bookFolder!!).map { it.name }.forEach { echo(it) }
         }
 
         companion object {
