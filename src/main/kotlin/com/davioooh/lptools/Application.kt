@@ -1,6 +1,7 @@
 package com.davioooh.lptools
 
 import com.davioooh.lptools.commands.ChaptersCmd
+import com.davioooh.lptools.commands.ChaptersCmd.Convert
 import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -40,7 +41,12 @@ class LPTools(val resolveManuscriptPathFun: ResolveManuscriptPathFun) : CliktCom
 typealias ResolveManuscriptPathFun = (Path) -> Path?
 
 fun main(args: Array<String>) =
-        LPTools(::resolveManuscriptPathOrNull)
-                .subcommands(ChaptersCmd()
-                        .subcommands(ListFiles(::listAllChapterFiles)))
-                .main(args)
+        LPTools(::resolveManuscriptPathOrNull).subcommands(
+                ChaptersCmd().subcommands(
+                        ListFiles(::listAllChapterFiles),
+                        Convert(mapOf(
+                                TXT_EXT to ::convertMdChapterFilesToTxt,
+                                MD_EXT to ::convertTxtChapterFilesToMd
+                        ))
+                )
+        ).main(args)
