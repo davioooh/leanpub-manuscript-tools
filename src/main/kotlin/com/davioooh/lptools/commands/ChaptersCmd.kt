@@ -1,6 +1,8 @@
 package com.davioooh.lptools.commands
 
 import com.davioooh.lptools.LPTools
+import com.davioooh.lptools.MD_EXT
+import com.davioooh.lptools.TXT_EXT
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.CliktError
 import com.github.ajalt.clikt.core.NoOpCliktCommand
@@ -30,16 +32,19 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
 
     }
 
-    class Convert(private val conversionMappings: Map<String, (Path) -> List<File>>) :
+    class Convert(private val txtToMdFun: TxtToMdFun, private val mdToTxtFun: MdToTxtFun) :
             CliktCommand(name = CONVERT_CMD_NAME, help = CMD_HELP_MSG) {
         private val config by requireObject<LPTools.Config>()
         private val to by option("--to", help = TO_OPT_HELP_MSG).choice("txt", "md")
                 .default("")
 
         override fun run() {
-            val conversionFun = conversionMappings[to]
-                    ?: throw CliktError("Error: Unsupported conversion format: $to")
-            val convertedFiles = conversionFun(config.bookFolder!!)
+            val convertedFiles =
+                    when (to) {
+                        TXT_EXT -> mdToTxtFun(config.bookFolder!!)
+                        MD_EXT -> txtToMdFun(config.bookFolder!!)
+                        else -> throw CliktError("Error: Unsupported conversion format: $to")
+                    }
             echo("Converted ${convertedFiles.size} files.")
             // TODO also print something like: 'old_ch_file.txt   =>  new_ch_file.md' ?
         }
@@ -64,3 +69,13 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
  * List manuscript chapter files, given the book root path
  */
 typealias ListChapterFilesFun = (Path) -> List<File>
+
+/**
+ * Rename manuscript chapter files from *.txt to *.md
+ */
+typealias TxtToMdFun = (Path) -> List<File>
+
+/**
+ * Rename manuscript chapter files from .md to .txt
+ */
+typealias MdToTxtFun = (Path) -> List<File>

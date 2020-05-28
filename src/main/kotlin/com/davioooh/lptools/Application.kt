@@ -44,9 +44,9 @@ fun main(args: Array<String>) =
         LPTools(::resolveManuscriptPathOrNull).subcommands(
                 ChaptersCmd().subcommands(
                         ListFiles(::listAllChapterFiles),
-                        Convert(mapOf(
-                                TXT_EXT to ::convertMdChapterFilesToTxt,
-                                MD_EXT to ::convertTxtChapterFilesToMd
-                        ))
+                        Convert(
+                                ::convertTxtChapterFilesToMd,
+                                ::convertMdChapterFilesToTxt
+                        )
                 )
         ).main(args)
