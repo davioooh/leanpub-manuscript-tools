@@ -33,18 +33,18 @@ fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<Str
 // TODO split file fetching in a separate fun
 fun convertTxtChapterFilesToMd(bookRootPath: Path): List<File> =
         listChapterFilesWithExtension(bookRootPath, TXT_EXT)
-                .map { txtFile ->
-                    txtFile.withExtension(MD_EXT)
-                            .apply { txtFile.renameTo(this) }
-                }
+                .replaceExtensionWith(MD_EXT)
 
 // TODO split file fetching in a separate fun
 fun convertMdChapterFilesToTxt(bookRootPath: Path): List<File> =
         listChapterFilesWithExtension(bookRootPath, MD_EXT)
-                .map { mdFile ->
-                    mdFile.withExtension(TXT_EXT)
-                            .apply { mdFile.renameTo(this) }
-                }
+                .replaceExtensionWith(TXT_EXT)
+
+private fun List<File>.replaceExtensionWith(newExtension: String): List<File> =
+        this.map { file ->
+            File(file.parentFile, "${file.nameWithoutExtension}.$newExtension")
+                    .apply { file.renameTo(this) }
+        }
 
 fun listChapterFilesWithExtension(bookRootPath: Path, extension: String): List<File> =
         resolveManuscriptPath(bookRootPath)
@@ -62,6 +62,3 @@ fun resolveManuscriptPathOrNull(bookRootPath: Path): Path? =
 fun resolveManuscriptPath(bookRootPath: Path): Path =
         resolveManuscriptPathOrNull(bookRootPath)
                 ?: throw IllegalArgumentException("Invalid book path: cannot find manuscript folder.")
-
-private fun File.withExtension(targetExtension: String): File =
-        File(this.parentFile, "${this.nameWithoutExtension}.$targetExtension")
