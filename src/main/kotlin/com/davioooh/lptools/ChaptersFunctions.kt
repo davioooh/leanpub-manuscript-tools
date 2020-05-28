@@ -30,6 +30,7 @@ fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<Str
             }
 }
 
+// TODO split file fetching in a separate fun
 fun convertTxtChapterFilesToMd(bookRootPath: Path): List<File> =
         listChapterFilesWithExtension(bookRootPath, TXT_EXT)
                 .map { txtFile ->
@@ -37,6 +38,7 @@ fun convertTxtChapterFilesToMd(bookRootPath: Path): List<File> =
                             .apply { txtFile.renameTo(this) }
                 }
 
+// TODO split file fetching in a separate fun
 fun convertMdChapterFilesToTxt(bookRootPath: Path): List<File> =
         listChapterFilesWithExtension(bookRootPath, MD_EXT)
                 .map { mdFile ->

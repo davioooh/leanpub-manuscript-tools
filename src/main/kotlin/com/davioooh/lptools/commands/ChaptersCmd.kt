@@ -41,6 +41,7 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
                     ?: throw CliktError("Error: Unsupported conversion format: $to")
             val convertedFiles = conversionFun(config.bookFolder!!)
             echo("Converted ${convertedFiles.size} files.")
+            // TODO also print something like: 'old_ch_file.txt   =>  new_ch_file.md' ?
         }
 
         companion object {
