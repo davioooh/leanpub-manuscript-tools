@@ -38,10 +38,7 @@ class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) : Cli
 fun main(args: Array<String>) =
         LPTools(::resolveManuscriptPathOrNull).subcommands(
                 ChaptersCmd().subcommands(
-                        ListFiles(::listAllChapterFiles),
-                        Convert(
-                                ::convertTxtChapterFilesToMd,
-                                ::convertMdChapterFilesToTxt
-                        )
+                        ListFiles { bookFolder -> listChapterFilesWithExtension(bookFolder, TXT_EXT) },
+                        Convert(::listChapterFilesWithExtension)
                 )
         ).main(args)

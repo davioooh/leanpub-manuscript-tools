@@ -9,9 +9,6 @@ const val CHAPTER_FILE_NAME_PREFIX = "ch"
 const val TXT_EXT = "txt"
 const val MD_EXT = "md"
 
-fun listAllChapterFiles(bookRootPath: Path): List<File> =
-        listChapterFilesWithExtension(bookRootPath, TXT_EXT)
-
 fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<String>): File {
     val bookTxt = resolveManuscriptPath(bookRootPath)
             .resolve("Book.txt")
@@ -29,22 +26,6 @@ fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<Str
                 }
             }
 }
-
-// TODO split file fetching in a separate fun
-fun convertTxtChapterFilesToMd(bookRootPath: Path): List<File> =
-        listChapterFilesWithExtension(bookRootPath, TXT_EXT)
-                .replaceExtensionWith(MD_EXT)
-
-// TODO split file fetching in a separate fun
-fun convertMdChapterFilesToTxt(bookRootPath: Path): List<File> =
-        listChapterFilesWithExtension(bookRootPath, MD_EXT)
-                .replaceExtensionWith(TXT_EXT)
-
-private fun List<File>.replaceExtensionWith(newExtension: String): List<File> =
-        this.map { file ->
-            File(file.parentFile, "${file.nameWithoutExtension}.$newExtension")
-                    .apply { file.renameTo(this) }
-        }
 
 fun listChapterFilesWithExtension(bookRootPath: Path, extension: String): List<File> =
         resolveManuscriptPath(bookRootPath)
