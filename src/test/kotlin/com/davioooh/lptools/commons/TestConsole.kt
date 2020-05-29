@@ -1,13 +1,6 @@
-package com.davioooh.lptools
+package com.davioooh.lptools.commons
 
-import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.output.CliktConsole
-import java.nio.file.Path
-
-val LINE_SEPARATOR: String = System.lineSeparator()
-const val TEST_BOOK_URL = "test/path"
-val TEST_BOOK_PATH: Path = Path.of(TEST_BOOK_URL)
-val TEST_MANUSCRIPT_PATH: Path = TEST_BOOK_PATH.resolve(MANUSCRIPT_FOLDER)
 
 object TestConsole : CliktConsole {
     val output = StringBuilder()
@@ -28,5 +21,3 @@ object TestConsole : CliktConsole {
     }
 
 }
-
-class DummyCommand : NoOpCliktCommand(name = "fake-cmd")

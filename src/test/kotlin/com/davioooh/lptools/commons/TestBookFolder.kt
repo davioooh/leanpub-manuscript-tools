@@ -1,8 +1,12 @@
-package com.davioooh.lptools
+package com.davioooh.lptools.commons
 
+import com.davioooh.lptools.CHAPTER_FILE_NAME_PREFIX
+import com.davioooh.lptools.MANUSCRIPT_FOLDER
+import com.davioooh.lptools.TXT_EXT
 import java.io.File
 import java.nio.file.Path
 
+// TODO enhancement: convert to object?
 class TestBookFolder(val bookRootFolder: Path) {
     private val manuscriptFolder = bookRootFolder.resolve(MANUSCRIPT_FOLDER)
 

@@ -1,6 +1,7 @@
 package com.davioooh.lptools
 
 import com.davioooh.lptools.LPTools.Config
+import com.davioooh.lptools.commons.*
 import com.github.ajalt.clikt.core.PrintHelpMessage
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.subcommands
@@ -12,8 +13,8 @@ import java.nio.file.Path
 
 internal class LPToolsTest {
 
-    private val lpTools = LPTools { TEST_MANUSCRIPT_PATH }.subcommands(DummyCommand())
-    private val lpToolsWithInvalidBookFolder = LPTools { null }.subcommands(DummyCommand())
+    private val lpTools = LPTools { TEST_MANUSCRIPT_PATH }.subcommands(FakeCommand)
+    private val lpToolsWithInvalidBookFolder = LPTools { null }.subcommands(FakeCommand)
 
 
     @BeforeEach
@@ -37,22 +38,22 @@ internal class LPToolsTest {
 
     @Test
     fun `default book folder should be set in command context`() {
-        lpTools.parse(arrayOf("fake-cmd"))
+        lpTools.parse(arrayOf(FAKE_CMD_NAME))
         val config = lpTools.currentContext.findObject<Config>()!!
         assertThat(config.bookFolder).isEqualTo(Path.of("."))
     }
 
     @Test
     fun `provided book folder should be set in command context`() {
-        lpTools.parse(arrayOf("-bf=$TEST_BOOK_URL", "fake-cmd"))
+        lpTools.parse(arrayOf("-bf=$TEST_BOOK_URL", FAKE_CMD_NAME))
         val config = lpTools.currentContext.findObject<Config>()!!
         assertThat(config.bookFolder).isEqualTo(TEST_BOOK_PATH)
     }
 
     @Test
-    fun `should print out usage error if book folder is not valid and a child cmd is invoked`() {
+    fun `should print out error if book folder is not valid and a child cmd is invoked`() {
         assertThatThrownBy {
-            lpToolsWithInvalidBookFolder.parse(arrayOf("-bf=$TEST_BOOK_URL", "fake-cmd"))
+            lpToolsWithInvalidBookFolder.parse(arrayOf("-bf=$TEST_BOOK_URL", FAKE_CMD_NAME))
         }.isInstanceOf(UsageError::class.java)
     }
 
