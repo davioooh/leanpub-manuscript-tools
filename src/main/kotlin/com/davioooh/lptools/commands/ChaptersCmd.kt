@@ -3,9 +3,10 @@ package com.davioooh.lptools.commands
 import com.davioooh.lptools.LPTools
 import com.davioooh.lptools.MD_EXT
 import com.davioooh.lptools.TXT_EXT
+import com.davioooh.lptools.replaceExtensionWith
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.CliktError
 import com.github.ajalt.clikt.core.NoOpCliktCommand
+import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
@@ -13,7 +14,8 @@ import com.github.ajalt.clikt.parameters.types.choice
 
 class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
     override fun aliases(): Map<String, List<String>> = mapOf(
-            "lf" to listOf(LIST_FILE_CMD_NAME)
+            "lf" to listOf(LIST_FILE_CMD_NAME),
+            "cf" to listOf(CONVERT_CMD_NAME)
     )
 
     class ListFiles(private val listChapterFiles: ListChapterFilesFun) :
@@ -30,21 +32,30 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
 
     }
 
-    class Convert(private val txtToMdFun: TxtToMdFun, private val mdToTxtFun: MdToTxtFun) :
+    class Convert(private val listChapterFilesWithExt: ListChapterFilesWithExtFun) :
             CliktCommand(name = CONVERT_CMD_NAME, help = CMD_HELP_MSG) {
         private val config by requireObject<LPTools.Config>()
         private val to by option("--to", help = TO_OPT_HELP_MSG).choice("txt", "md")
                 .default("")
 
         override fun run() {
-            val convertedFiles =
-                    when (to) {
-                        TXT_EXT -> mdToTxtFun(config.bookFolder!!)
-                        MD_EXT -> txtToMdFun(config.bookFolder!!)
-                        else -> throw CliktError("Error: Unsupported conversion format: $to")
-                    }
+            val convertedFiles = when (to) {
+                TXT_EXT -> {
+                    val mdChapters = listChapterFilesWithExt(config.bookFolder!!, MD_EXT)
+                    val txtRenamedChapters = mdChapters.replaceExtensionWith(TXT_EXT)
+                    mdChapters.zip(txtRenamedChapters)
+                }
+                MD_EXT -> {
+                    val txtChapters = listChapterFilesWithExt(config.bookFolder!!, TXT_EXT)
+                    val mdRenamedChapters = txtChapters.replaceExtensionWith(MD_EXT)
+                    txtChapters.zip(mdRenamedChapters)
+                }
+                else -> throw UsageError("Unsupported conversion format: $to")
+            }
             echo("Converted ${convertedFiles.size} files.")
-            // TODO also print something like: 'old_ch_file.txt   =>  new_ch_file.md' ?
+            convertedFiles.forEach { (from, to) ->
+                echo("\t${from.name}\t=>\t${to.name}")
+            }
         }
 
         companion object {

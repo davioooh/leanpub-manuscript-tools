@@ -7,19 +7,20 @@ import java.nio.file.Path
  * Resolve the manuscript path, given the book root path.
  * Returns null if the manuscript folder does not exist.
  */
-typealias ResolveManuscriptPathFun = (Path) -> Path?
+typealias ResolveManuscriptPathFun = (bookFolder: Path) -> Path?
 
 /**
  * List manuscript chapter files, given the book root path
  */
-typealias ListChapterFilesFun = (Path) -> List<File>
+typealias ListChapterFilesFun = (bookFolder: Path) -> List<File>
 
 /**
- * Rename manuscript chapter files from *.txt to *.md
+ * List manuscript chapter files having the given extension
  */
-typealias TxtToMdFun = (Path) -> List<File>
+typealias ListChapterFilesWithExtFun = (bookFolder: Path, ext: String) -> List<File>
 
 /**
- * Rename manuscript chapter files from .md to .txt
+ * Rename manuscript chapter files from *.ext to *.newExt
  */
-typealias MdToTxtFun = (Path) -> List<File>
+typealias ReplaceExtFun = (chapterFiles: List<File>, newExt: String) -> List<File>
+
