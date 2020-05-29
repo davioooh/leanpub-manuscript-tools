@@ -1,5 +1,7 @@
 package com.davioooh.lptools
 
+import com.davioooh.lptools.commons.LINE_SEPARATOR
+import com.davioooh.lptools.commons.TestBookFolder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll

@@ -1,6 +1,7 @@
 package com.davioooh.lptools
 
 import com.davioooh.lptools.LPTools.Config
+import com.davioooh.lptools.commons.*
 import com.github.ajalt.clikt.core.PrintHelpMessage
 import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.subcommands
@@ -12,8 +13,8 @@ import java.nio.file.Path
 
 internal class LPToolsTest {
 
-    private val lpTools = LPTools { TEST_MANUSCRIPT_PATH }.subcommands(FakeCommand())
-    private val lpToolsWithInvalidBookFolder = LPTools { null }.subcommands(FakeCommand())
+    private val lpTools = LPTools { TEST_MANUSCRIPT_PATH }.subcommands(FakeCommand)
+    private val lpToolsWithInvalidBookFolder = LPTools { null }.subcommands(FakeCommand)
 
 
     @BeforeEach

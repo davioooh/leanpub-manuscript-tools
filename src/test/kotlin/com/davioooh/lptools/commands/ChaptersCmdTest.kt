@@ -1,22 +1,20 @@
 package com.davioooh.lptools.commands
 
-import com.davioooh.lptools.*
+import com.davioooh.lptools.LPTools
+import com.davioooh.lptools.MD_EXT
+import com.davioooh.lptools.TXT_EXT
 import com.davioooh.lptools.commands.ChaptersCmd.Convert
 import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
+import com.davioooh.lptools.commons.*
 import com.github.ajalt.clikt.core.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.io.File
 
 internal class ChaptersCmdTest {
 
-    private val fakeTxtFiles = listOf(File("ch01.txt"), File("ch02.txt"), File("ch03.txt"))
-    private val fakeMdFiles = listOf(File("ch01.md"), File("ch02.md"), File("ch03.md"))
-    private val expectedTxtFileNames = fakeTxtFiles.joinToString(LINE_SEPARATOR, postfix = LINE_SEPARATOR)
-
-    private val lpToolsChaptersWithFakeCmd = lpToolsChaptersWith(FakeCommand())
+    private val lpToolsChaptersWithFakeCmd = lpToolsChaptersWith(FakeCommand)
     private val lpToolsChaptersWithListFilesCmd = lpToolsChaptersWith(
             ListFiles { fakeTxtFiles }.apply { context { console = TestConsole } }
     )
@@ -45,6 +43,7 @@ internal class ChaptersCmdTest {
 
     @Test
     fun `should print out 3 chapter files`() {
+        val expectedTxtFileNames = fakeTxtFileNames
         lpToolsChaptersWithListFilesCmd.parse(arrayOf("chapters", "lf"))
         assertThat(TestConsole.output.toString()).isEqualTo(expectedTxtFileNames)
     }
