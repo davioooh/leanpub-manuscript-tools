@@ -19,8 +19,3 @@ typealias ListChapterFilesFun = (bookFolder: Path) -> List<File>
  */
 typealias ListChapterFilesWithExtFun = (bookFolder: Path, ext: String) -> List<File>
 
-/**
- * Rename manuscript chapter files from *.ext to *.newExt
- */
-typealias ReplaceExtFun = (chapterFiles: List<File>, newExt: String) -> List<File>
-
