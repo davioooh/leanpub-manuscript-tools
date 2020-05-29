@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("org.jetbrains.kotlin.jvm").version("1.3.72")
+    kotlin("jvm").version("1.3.72")
 }
 
 group = "com.davioooh.lptools"
@@ -19,7 +19,7 @@ val cliktVersion = "2.7.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("com.github.ajalt:clikt:$cliktVersion")
+    implementation("com.github.ajalt:clikt-multiplatform:$cliktVersion")
     testImplementation(kotlin("test-junit"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testImplementation("org.assertj:assertj-core:$assertjVersion")
