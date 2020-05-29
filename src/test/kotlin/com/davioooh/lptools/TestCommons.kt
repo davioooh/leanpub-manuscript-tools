@@ -29,4 +29,6 @@ object TestConsole : CliktConsole {
 
 }
 
-class DummyCommand : NoOpCliktCommand(name = "fake-cmd")
+const val FAKE_CMD_NAME = "fake-cmd"
+
+class FakeCommand : NoOpCliktCommand(name = FAKE_CMD_NAME)
