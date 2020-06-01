@@ -35,7 +35,7 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
     class Convert(private val listChapterFilesWithExt: ListChapterFilesWithExtFun) :
             CliktCommand(name = CONVERT_CMD_NAME, help = CMD_HELP_MSG) {
         private val config by requireObject<LPTools.Config>()
-        private val to by option("--to", help = TO_OPT_HELP_MSG).choice("txt", "md")
+        private val to by option("--to", help = TO_OPT_HELP_MSG).choice(TXT_EXT, MD_EXT)
                 .default("")
 
         override fun run() {
