@@ -3,6 +3,9 @@ package com.davioooh.lptools
 import com.davioooh.lptools.commands.ChaptersCmd
 import com.davioooh.lptools.commands.ChaptersCmd.Convert
 import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
+import com.davioooh.lptools.commands.ListChapterFilesFun
+import com.davioooh.lptools.commands.ManuscriptCmd
+import com.davioooh.lptools.commands.ManuscriptCmd.Generate
 import com.davioooh.lptools.commands.ResolveManuscriptPathFun
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -35,10 +38,15 @@ class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) : Cli
 
 }
 
+val listTxtChapters: ListChapterFilesFun = { bookFolder -> listChapterFilesWithExtension(bookFolder, TXT_EXT) }
+
 fun main(args: Array<String>) =
         LPTools(::resolveManuscriptPathOrNull).subcommands(
                 ChaptersCmd().subcommands(
-                        ListFiles { bookFolder -> listChapterFilesWithExtension(bookFolder, TXT_EXT) },
+                        ListFiles(listTxtChapters),
                         Convert(::listChapterFilesWithExtension)
+                ),
+                ManuscriptCmd().subcommands(
+                        Generate(listTxtChapters, ::generateBookTxtFromFileNames)
                 )
         ).main(args)

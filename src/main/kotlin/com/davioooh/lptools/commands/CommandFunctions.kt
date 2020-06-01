@@ -19,3 +19,7 @@ typealias ListChapterFilesFun = (bookFolder: Path) -> List<File>
  */
 typealias ListChapterFilesWithExtFun = (bookFolder: Path, ext: String) -> List<File>
 
+/**
+ * Generate Book.txt file, given the book root path and chapter file names.
+ */
+typealias GenerateBookTxtFun = (Path, List<String>) -> File
