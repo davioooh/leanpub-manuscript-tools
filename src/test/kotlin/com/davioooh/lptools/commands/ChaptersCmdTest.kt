@@ -15,9 +15,6 @@ import org.junit.jupiter.api.Test
 internal class ChaptersCmdTest {
 
     private val lpToolsChaptersWithFakeCmd = lpToolsChaptersWith(FakeCommand)
-    private val lpToolsChaptersWithListFilesCmd = lpToolsChaptersWith(
-            ListFiles { fakeTxtFiles }.apply { context { console = TestConsole } }
-    )
 
     private fun lpToolsChaptersWith(chaptersSubCmd: CliktCommand) =
             LPTools { TEST_MANUSCRIPT_PATH }
@@ -42,13 +39,25 @@ internal class ChaptersCmdTest {
     /* list-files */
 
     @Test
+    fun `should print nothing when manuscript folder is empty`() {
+        lpToolsChaptersWith(listFilesCmd { listOf() })
+                .parse(arrayOf("chapters", "lf"))
+
+        assertThat(TestConsole.output.toString()).isEmpty()
+    }
+
+    @Test
     fun `should print out 3 chapter files`() {
         val expectedTxtFileNames = fakeTxtFileNames
 
-        lpToolsChaptersWithListFilesCmd.parse(arrayOf("chapters", "lf"))
+        lpToolsChaptersWith(listFilesCmd { fakeTxtFiles })
+                .parse(arrayOf("chapters", "lf"))
 
         assertThat(TestConsole.output.toString()).isEqualTo(expectedTxtFileNames)
     }
+
+    private fun listFilesCmd(listChapterFiles: ListChapterFilesFun) =
+            ListFiles(listChapterFiles).apply { context { console = TestConsole } }
 
 
     /* convert */
@@ -100,7 +109,7 @@ internal class ChaptersCmdTest {
         }.isInstanceOf(UsageError::class.java)
     }
 
-    private fun convertCmd(listChapterFilesWithExtFun: ListChapterFilesWithExtFun) =
-            Convert(listChapterFilesWithExtFun).apply { context { console = TestConsole } }
+    private fun convertCmd(listChapterFilesWithExt: ListChapterFilesWithExtFun) =
+            Convert(listChapterFilesWithExt).apply { context { console = TestConsole } }
 
 }
