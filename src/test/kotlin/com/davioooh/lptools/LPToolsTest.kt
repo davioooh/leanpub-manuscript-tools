@@ -39,6 +39,7 @@ internal class LPToolsTest {
     @Test
     fun `default book folder should be set in command context`() {
         lpTools.parse(arrayOf(FAKE_CMD_NAME))
+
         val config = lpTools.currentContext.findObject<Config>()!!
         assertThat(config.bookFolder).isEqualTo(Path.of("."))
     }
@@ -46,6 +47,7 @@ internal class LPToolsTest {
     @Test
     fun `provided book folder should be set in command context`() {
         lpTools.parse(arrayOf("-bf=$TEST_BOOK_URL", FAKE_CMD_NAME))
+
         val config = lpTools.currentContext.findObject<Config>()!!
         assertThat(config.bookFolder).isEqualTo(TEST_BOOK_PATH)
     }

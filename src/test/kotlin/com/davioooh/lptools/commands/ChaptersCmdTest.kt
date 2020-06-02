@@ -44,7 +44,9 @@ internal class ChaptersCmdTest {
     @Test
     fun `should print out 3 chapter files`() {
         val expectedTxtFileNames = fakeTxtFileNames
+
         lpToolsChaptersWithListFilesCmd.parse(arrayOf("chapters", "lf"))
+
         assertThat(TestConsole.output.toString()).isEqualTo(expectedTxtFileNames)
     }
 
@@ -55,24 +57,31 @@ internal class ChaptersCmdTest {
     fun `no chapter file should be converted`() {
         lpToolsChaptersWith(convertCmd { _, _ -> listOf() })
                 .parse(arrayOf("chapters", "cf", "--to=$TXT_EXT"))
+
         assertThat(TestConsole.output.toString()).contains("0 files")
         assertThat(TestConsole.output.toString()).doesNotContain("=>")
     }
 
     @Test
     fun `should convert 3 txt chapters to md`() {
+        val mappingRegex = ".*\\.txt\t=>.*\\.md".toRegex()
+
         lpToolsChaptersWith(convertCmd { _, _ -> fakeTxtFiles })
                 .parse(arrayOf("chapters", "cf", "--to=$MD_EXT"))
+
         assertThat(TestConsole.output.toString()).contains("3 files")
-        assertThat(TestConsole.output.toString()).containsPattern(".*\\.txt\t=>.*\\.md")
+        assertThat(mappingRegex.findAll(TestConsole.output.toString()).asIterable()).hasSize(3)
     }
 
     @Test
     fun `should convert 3 md chapters to txt`() {
+        val mappingRegex = ".*\\.md\t=>.*\\.txt".toRegex()
+
         lpToolsChaptersWith(convertCmd { _, _ -> fakeMdFiles })
                 .parse(arrayOf("chapters", "cf", "--to=$TXT_EXT"))
+
         assertThat(TestConsole.output.toString()).contains("3 files")
-        assertThat(TestConsole.output.toString()).containsPattern(".*\\.md\t=>.*\\.txt")
+        assertThat(mappingRegex.findAll(TestConsole.output.toString()).asIterable()).hasSize(3)
     }
 
     @Test
