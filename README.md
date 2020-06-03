@@ -1,6 +1,10 @@
 # Leanpub Manuscript Tools
-Command line tools for Leanpub authors.
 
-> Note: This is not an official Leanpub product and is not supported by the Leanpub team. 
+[![build](https://github.com/davioooh/leanpub-manuscript-tools/workflows/build/badge.svg)](https://github.com/davioooh/leanpub-manuscript-tools/actions)
+[![issues](https://img.shields.io/github/issues/davioooh/leanpub-manuscript-tools.svg)](https://github.com/davioooh/leanpub-manuscript-tools/issues/)
+[![Public Domain](https://img.shields.io/badge/license-Apache%20License%202.0-informational.svg)](https://github.com/davioooh/leanpub-manuscript-tools/blob/master/LICENSE)
+[![made with kotlin](https://img.shields.io/badge/made%20with-Kotlin-informational.svg)](https://kotlinlang.org/)
 
-[![Build Status](https://travis-ci.org/davioooh/leanpub-manuscript-tools.svg?branch=master)](https://travis-ci.org/davioooh/leanpub-manuscript-tools)
+Command line tools for [Leanpub](https://leanpub.com/) authors.
+
+> Note: This is not an official Leanpub product and is not supported by the Leanpub team.
