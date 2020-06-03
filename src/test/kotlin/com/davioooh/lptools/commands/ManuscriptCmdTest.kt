@@ -38,14 +38,14 @@ internal class ManuscriptCmdTest {
     @Test
     fun `should print out error when no generation option is provided`() {
         assertThatThrownBy {
-            lpToolsManuscriptWith(generateCmd({ listOf() }, { _, _ -> File("Book.txt") }))
+            lpToolsManuscriptWith(generateCmd({ listOf() }))
                     .parse(arrayOf("manuscript", "gn"))
         }.isInstanceOf(UsageError::class.java)
     }
 
     @Test
     fun `should not generate Book_txt when manuscript folder is empty`() {
-        lpToolsManuscriptWith(generateCmd({ listOf() }, { _, _ -> File("Book.txt") }))
+        lpToolsManuscriptWith(generateCmd({ listOf() }))
                 .parse(arrayOf("manuscript", "gn", "-b"))
 
         assertThat(TestConsole.output.toString()).contains("Book.txt not generated")
@@ -53,13 +53,15 @@ internal class ManuscriptCmdTest {
 
     @Test
     fun `should generate Book_txt when manuscript folder is not empty`() {
-        lpToolsManuscriptWith(generateCmd({ fakeTxtFiles }, { _, _ -> File("Book.txt") }))
+        lpToolsManuscriptWith(generateCmd({ fakeTxtFiles }))
                 .parse(arrayOf("manuscript", "gn", "-b"))
 
         assertThat(TestConsole.output.toString()).contains("Generated:")
     }
 
-    private fun generateCmd(listChapterFiles: ListChapterFilesFun, generateBookTxt: GenerateBookTxtFun) =
-            ManuscriptCmd.Generate(listChapterFiles, generateBookTxt).apply { context { console = TestConsole } }
+    private fun generateCmd(
+            listChapterFiles: ListChapterFilesFun,
+            generateBookTxt: GenerateBookTxtFun = { _, _ -> File("Book.txt") }
+    ) = ManuscriptCmd.Generate(listChapterFiles, generateBookTxt).apply { context { console = TestConsole } }
 
 }
