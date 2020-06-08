@@ -47,9 +47,9 @@ internal class CommonFunctionsTest {
             "This is my favorite chapter!" to "this-is-my-favorite-chapter",
             "Wow! What a nice chapter!" to "wow-what-a-nice-chapter",
             "This is a chapter called -= 10=-..." to "this-is-a-chapter-called-10",
-            """Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel diam at libero sodales venenatis.
-            |Vivamus risus nibh, porta varius pharetra sed, bibendum sed risus. Donec quis dui et est finibus elementum.
-            |Maecenas non tellus turpis. Sed fringilla risus libero, non euismod diam fermentum ut.""" to "lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-maecenas-vel-diam-at-libero-sodales-venenatis-vivamus-risus-nibh-porta-varius"
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas vel diam at libero sodales venenatis. " +
+                    "Vivamus risus nibh, porta varius pharetra sed, bibendum sed risus. Donec quis dui et est finibus elementum. " +
+                    "Maecenas non tellus turpis. Sed fringilla risus libero, non euismod diam fermentum ut." to "lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-maecenas-vel-diam-at-libero-sodales-venenatis-vivamus-risus-nibh-porta-varius"
     )
 
 }
