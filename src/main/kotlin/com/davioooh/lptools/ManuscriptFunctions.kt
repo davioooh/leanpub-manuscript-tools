@@ -5,11 +5,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 const val MANUSCRIPT_FOLDER = "manuscript"
-const val CHAPTER_FILE_NAME_PREFIX = "ch"
-const val CHAPTER_FILE_NUM_SEPARATOR = "_"
-const val CHAPTER_FILE_NAME_SEPARATOR = "-"
-const val TXT_EXT = "txt"
-const val MD_EXT = "md"
 
 fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<String>): File {
     val bookTxt = resolveManuscriptPath(bookRootPath)
@@ -34,8 +29,8 @@ fun listChapterFilesWithExtension(bookRootPath: Path, extension: String): List<F
                 .toFile()
                 .listFiles { file ->
                     file.isFile
-                            && file.nameWithoutExtension.startsWith(CHAPTER_FILE_NAME_PREFIX, true)
-                            && file.extension.toLowerCase() == extension
+                            && file.hasNameWithChapterPrefix()
+                            && file.hasExtension(extension)
                 }?.toList()?.sortedBy { it.name } ?: listOf()
 
 fun resolveManuscriptPathOrNull(bookRootPath: Path): Path? =
@@ -48,11 +43,9 @@ fun resolveManuscriptPath(bookRootPath: Path): Path =
 
 
 fun createNewChapterFile(bookRootPath: Path, number: Int, leadingZeros: Int = 0, title: String? = null): File {
-    val formattedNum = number.normalizeChapterNumber(leadingZeros)
-    val formattedTitle = title?.normalizeChapterTitle()
-    val newChFileName = "$CHAPTER_FILE_NAME_PREFIX$formattedNum" +
-            (if (formattedTitle != null) "${CHAPTER_FILE_NUM_SEPARATOR}$formattedTitle" else "") +
-            ".$TXT_EXT"
+    val normalizedChNum = number.normalizeChapterNumber(leadingZeros)
+    val normalizedChTitle = title?.normalizeChapterTitle()
+    val newChFileName = buildChapterFileName(normalizedChNum, normalizedChTitle)
 
     return resolveManuscriptPath(bookRootPath)
             .resolve(newChFileName)
@@ -60,7 +53,7 @@ fun createNewChapterFile(bookRootPath: Path, number: Int, leadingZeros: Int = 0,
             .apply { createNewFile() }
             .apply {
                 printWriter().use { writer ->
-                    writer.println("{#ch-${formattedTitle ?: number}}")
+                    writer.println("{#ch-${normalizedChTitle ?: number}}")
                     writer.println("# ${title ?: "New Chapter"}")
                 }
             }
