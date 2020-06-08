@@ -1,8 +1,8 @@
 package com.davioooh.lptools.commons
 
-import com.davioooh.lptools.CHAPTER_FILE_NAME_PREFIX
 import com.davioooh.lptools.MANUSCRIPT_FOLDER
 import com.davioooh.lptools.TXT_EXT
+import com.davioooh.lptools.buildChapterFileName
 import java.io.File
 import java.nio.file.Path
 
@@ -35,7 +35,7 @@ class TestBookFolder(val bookRootFolder: Path) {
     }
 
     private fun createFakeChapterFile(chapterNum: Int, fileExt: String): File =
-            createManuscriptFile(testFileNameFrom(chapterNum, fileExt))
+            createManuscriptFile(buildChapterFileName("0$chapterNum", fileExtension = fileExt))
                     .apply {
                         this.printWriter().use { out ->
                             out.println("# Chapter $chapterNum")
@@ -52,7 +52,4 @@ class TestBookFolder(val bookRootFolder: Path) {
                     .toFile()
                     .apply { createNewFile() }
 
-    // TODO improve file name creation
-    private fun testFileNameFrom(chapterNum: Int, fileExt: String) =
-            "${CHAPTER_FILE_NAME_PREFIX}0$chapterNum.$fileExt"
 }

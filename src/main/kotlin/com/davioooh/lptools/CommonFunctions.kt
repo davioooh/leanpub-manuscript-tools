@@ -26,7 +26,7 @@ fun String.normalizeChapterTitle(): String =
                 .joinToString(CHAPTER_FILE_NAME_SEPARATOR)
                 .toLowerCase()
 
-fun buildChapterFileName(normalizedChNum: String, normalizedChTitle: String?): String =
+fun buildChapterFileName(normalizedChNum: String, normalizedChTitle: String? = null, fileExtension: String = TXT_EXT): String =
         "$CHAPTER_FILE_NAME_PREFIX$normalizedChNum" +
                 (if (normalizedChTitle != null) "${CHAPTER_FILE_NUM_SEPARATOR}$normalizedChTitle" else "") +
-                ".$TXT_EXT"
+                ".$fileExtension"
