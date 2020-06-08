@@ -65,4 +65,12 @@ internal class ManuscriptFunctionsTest {
         assertThat(bookTxt.readText()).isEqualTo(expectedBookTxt)
     }
 
+    @Test
+    fun `should create new chapter file given the chapter number`() {
+        val newChapter = createNewChapterFile(5, "Chapter name")
+
+        assertThat(newChapter.name).isEqualTo("ch5_chapter-name.txt")
+    }
+
+
 }
