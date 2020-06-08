@@ -11,6 +11,17 @@ const val MD_EXT = "md"
 fun File.hasNameWithChapterPrefix() = this.nameWithoutExtension.startsWith(CHAPTER_FILE_NAME_PREFIX, true)
 fun File.hasExtension(ext: String) = this.extension.toLowerCase() == ext
 
+fun File.createAndWriteLines(vararg lines: String): File {
+    if (createNewFile()) {
+        printWriter().use { writer ->
+            lines.forEach { writer.println(it) }
+        }
+        return this
+    } else {
+        throw IllegalStateException("Cannot create $this, file already exists.")
+    }
+}
+
 fun List<File>.replaceExtensionWith(newExtension: String): List<File> =
         this.map { file ->
             File(file.parentFile, "${file.nameWithoutExtension}.$newExtension")

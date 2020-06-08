@@ -13,15 +13,7 @@ fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<Str
 
     if (bookTxt.exists()) bookTxt.delete()
 
-    return bookTxt
-            .apply { createNewFile() }
-            .apply {
-                printWriter().use { writer ->
-                    chaptersFileNames.forEach { fileName ->
-                        writer.println(fileName)
-                    }
-                }
-            }
+    return bookTxt.createAndWriteLines(*chaptersFileNames.toTypedArray())
 }
 
 fun listChapterFilesWithExtension(bookRootPath: Path, extension: String): List<File> =
@@ -42,19 +34,16 @@ fun resolveManuscriptPath(bookRootPath: Path): Path =
                 ?: throw IllegalArgumentException("Invalid book path: cannot find manuscript folder.")
 
 
-fun createNewChapterFile(bookRootPath: Path, number: Int, leadingZeros: Int = 0, title: String? = null): File {
-    val normalizedChNum = number.normalizeChapterNumber(leadingZeros)
-    val normalizedChTitle = title?.normalizeChapterTitle()
+fun createNewChapterFile(bookRootPath: Path, chNumber: Int, chNumberLeadingZeros: Int = 0, chTitle: String? = null): File {
+    val normalizedChNum = chNumber.normalizeChapterNumber(chNumberLeadingZeros)
+    val normalizedChTitle = chTitle?.normalizeChapterTitle()
     val newChFileName = buildChapterFileName(normalizedChNum, normalizedChTitle)
 
     return resolveManuscriptPath(bookRootPath)
             .resolve(newChFileName)
             .toFile()
-            .apply { createNewFile() }
-            .apply {
-                printWriter().use { writer ->
-                    writer.println("{#ch-${normalizedChTitle ?: number}}")
-                    writer.println("# ${title ?: "New Chapter"}")
-                }
-            }
+            .createAndWriteLines(
+                    "{#ch-${normalizedChTitle ?: chNumber}}",
+                    "# ${chTitle ?: "New Chapter"}"
+            )
 }
