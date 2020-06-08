@@ -10,7 +10,9 @@ import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.requireObject
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.options.validate
 import com.github.ajalt.clikt.parameters.types.choice
+import com.github.ajalt.clikt.parameters.types.int
 
 class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
     override fun aliases(): Map<String, List<String>> = mapOf(
@@ -65,10 +67,50 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
 
     }
 
+    class CreateNew(private val createNewChapter: CreateNewChapterFun) :
+            CliktCommand(name = CREATE_NEW_CMD_NAME, help = CMD_HELP_MSG) {
+        private val config by requireObject<LPTools.Config>()
+        private val chNumber by option("--number", "-n", help = NUMBER_OPT_HELP_MSG).int()
+                .validate {
+                    require(it >= 0) { "--number must be bigger than 0" }
+                }
+        private val chTitle by option("--title", "-t", help = TITLE_OPT_HELP_MSG)
+
+        override fun run() {
+            val number = chNumber ?: findNextChNumber()
+            try {
+                if (isChNumberAlreadyUsed(number)) {
+                    echo("Error: Chapter # $number already exists.", err = true)
+                } else {
+                    // TODO enhancement: set 1 leading zero by default
+                    //  => what if the book contains more than 99 files?
+                    createNewChapter(config.bookFolder!!, number, 1, chTitle)
+                }
+            } catch (ex: Exception) {
+                echo("Error: ${ex.message ?: "Cannot create new chapter."}", err = true)
+            }
+        }
+
+        private fun findNextChNumber(): Int {
+            TODO("findNextChNumber")
+        }
+
+        private fun isChNumberAlreadyUsed(chNumber: Int): Boolean {
+            TODO("isChNumberAlreadyUsed")
+        }
+
+        companion object {
+            const val CMD_HELP_MSG = "Create new chapter file."
+            const val NUMBER_OPT_HELP_MSG = "Chapter number."
+            const val TITLE_OPT_HELP_MSG = "Chapter title."
+        }
+    }
+
     companion object {
         const val CHAPTERS_CMD_NAME = "chapters"
         const val LIST_FILE_CMD_NAME = "list-files"
         const val CONVERT_CMD_NAME = "convert"
+        const val CREATE_NEW_CMD_NAME = "new"
 
     }
 
