@@ -30,6 +30,9 @@ internal class ManuscriptFunctionsTest {
         testBook.deleteManuscriptFolder()
     }
 
+
+    /* List chapter files */
+
     @Test
     fun `should find 3 TXT chapter files in manuscript folder`() {
         testBook.createManuscriptFolder()
@@ -56,13 +59,42 @@ internal class ManuscriptFunctionsTest {
         assertThat(mdChapters.map { it.name }).isEqualTo(expected3MdFiles)
     }
 
+
+    /* Generate Book.txt */
+
     @Test
     fun `should generate Book_txt with 3 chapter files`() {
         testBook.createManuscriptFolder()
 
         val bookTxt = generateBookTxtFromFileNames(testBook.bookRootFolder, expected3TxtFiles)
 
+        assertThat(bookTxt.name).isEqualTo("Book.txt")
         assertThat(bookTxt.readText()).isEqualTo(expectedBookTxt)
+    }
+
+
+    /* Create new chapter */
+
+    @Test
+    fun `should create new chapter file given the chapter number`() {
+        testBook.createManuscriptFolder()
+
+        val newChapter = createNewChapterFile(testBook.bookRootFolder, 3)
+
+        assertThat(newChapter.name).isEqualTo("ch3.txt")
+        assertThat(newChapter.readText()).isEqualTo("{#ch-3}$LINE_SEPARATOR# New Chapter$LINE_SEPARATOR")
+
+    }
+
+    @Test
+    fun `should create new chapter file given the chapter number and title`() {
+        testBook.createManuscriptFolder()
+
+        val newChapter = createNewChapterFile(testBook.bookRootFolder, 5, 1, "Chapter name")
+
+        assertThat(newChapter.name).isEqualTo("ch05_chapter-name.txt")
+        assertThat(newChapter.readText()).isEqualTo("{#ch-chapter-name}$LINE_SEPARATOR# Chapter name$LINE_SEPARATOR")
+
     }
 
 }

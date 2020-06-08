@@ -21,9 +21,10 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.github.ajalt:clikt-multiplatform:$cliktVersion")
     testImplementation(kotlin("test-junit"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation(junit5("api"))
+    testImplementation(junit5("params"))
     testImplementation("org.assertj:assertj-core:$assertjVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+    testRuntimeOnly(junit5("engine"))
 }
 
 tasks.withType<KotlinCompile>().configureEach {
@@ -35,3 +36,6 @@ tasks.withType<KotlinCompile>().configureEach {
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
+
+fun DependencyHandler.junit5(module: String, version: String? = junitVersion): Any =
+        "org.junit.jupiter:junit-jupiter-$module${version?.let { ":$version" } ?: ""}"
