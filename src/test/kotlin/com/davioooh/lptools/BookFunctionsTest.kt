@@ -13,7 +13,7 @@ import org.junit.jupiter.api.io.TempDir
 import java.nio.file.Path
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class ManuscriptFunctionsTest {
+internal class BookFunctionsTest {
     private lateinit var testBook: TestBookFolder
 
     private val expected3TxtFiles = fakeTxtFileNamesList
