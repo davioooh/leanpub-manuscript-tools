@@ -6,8 +6,8 @@ import java.nio.file.Path
 
 const val MANUSCRIPT_FOLDER = "manuscript"
 const val CHAPTER_FILE_NAME_PREFIX = "ch"
-const val CHAPTER_FILE_NUM_SEPARATOR = '_'
-const val CHAPTER_FILE_NAME_SEPARATOR = '-'
+const val CHAPTER_FILE_NUM_SEPARATOR = "_"
+const val CHAPTER_FILE_NAME_SEPARATOR = "-"
 const val TXT_EXT = "txt"
 const val MD_EXT = "md"
 
@@ -47,16 +47,21 @@ fun resolveManuscriptPath(bookRootPath: Path): Path =
                 ?: throw IllegalArgumentException("Invalid book path: cannot find manuscript folder.")
 
 
-fun createNewChapterFile(number: Int, title: String? = null): File { // TODO implement leadingZeros
-    val formattedNum = number.toString()
-    val formattedTitle =
-            title?.toLowerCase()?.replace(Regex("\\W"), CHAPTER_FILE_NAME_SEPARATOR.toString())
-                    ?.take(200)
-                    ?.trim(CHAPTER_FILE_NAME_SEPARATOR)
+fun createNewChapterFile(bookRootPath: Path, number: Int, leadingZeros: Int = 0, title: String? = null): File {
+    val formattedNum = number.normalizeChapterNumber(leadingZeros)
+    val formattedTitle = title?.normalizeChapterTitle()
+    val newChFileName = "$CHAPTER_FILE_NAME_PREFIX$formattedNum" +
+            (if (formattedTitle != null) "${CHAPTER_FILE_NUM_SEPARATOR}$formattedTitle" else "") +
+            ".$TXT_EXT"
 
-    return File(
-            "$CHAPTER_FILE_NAME_PREFIX$formattedNum" +
-                    (if (formattedTitle != null) "${CHAPTER_FILE_NUM_SEPARATOR}$formattedTitle" else "") +
-                    ".$TXT_EXT"
-    )
+    return resolveManuscriptPath(bookRootPath)
+            .resolve(newChFileName)
+            .toFile()
+            .apply { createNewFile() }
+            .apply {
+                printWriter().use { writer ->
+                    writer.println("{#ch-${formattedTitle ?: number}}")
+                    writer.println("# ${title ?: "New Chapter"}")
+                }
+            }
 }
