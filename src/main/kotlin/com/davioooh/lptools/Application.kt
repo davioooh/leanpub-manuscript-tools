@@ -1,14 +1,12 @@
 package com.davioooh.lptools
 
 import com.davioooh.lptools.commands.ChaptersCmd
-import com.davioooh.lptools.commands.ChaptersCmd.Convert
-import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
+import com.davioooh.lptools.commands.ChaptersCmd.*
 import com.davioooh.lptools.commands.ListChapterFilesFun
 import com.davioooh.lptools.commands.ManuscriptCmd
 import com.davioooh.lptools.commands.ManuscriptCmd.Generate
 import com.davioooh.lptools.commands.ResolveManuscriptPathFun
 import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.findOrSetObject
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.options.default
@@ -23,7 +21,7 @@ class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) : Cli
 
     override fun run() {
         if (resolveManuscriptPath(bookFolder) == null)
-            throw UsageError("Invalid book path: cannot find manuscript folder in: $bookFolder")
+            echo("Error: Invalid book path: cannot find manuscript folder in: $bookFolder", err = true)
         config.bookFolder = bookFolder
     }
 
@@ -44,7 +42,8 @@ fun main(args: Array<String>) =
         LPTools(::resolveManuscriptPathOrNull).subcommands(
                 ChaptersCmd().subcommands(
                         ListFiles(listTxtChapters),
-                        Convert(::listChapterFilesWithExtension)
+                        Convert(::listChapterFilesWithExtension),
+                        CreateNew(::createNewChapterFile)
                 ),
                 ManuscriptCmd().subcommands(
                         Generate(listTxtChapters, ::generateBookTxtFromFileNames)
