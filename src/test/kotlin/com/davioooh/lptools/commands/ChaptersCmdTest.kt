@@ -1,16 +1,14 @@
 package com.davioooh.lptools.commands
 
-import com.davioooh.lptools.LPTools
-import com.davioooh.lptools.MD_EXT
-import com.davioooh.lptools.TXT_EXT
-import com.davioooh.lptools.commands.ChaptersCmd.Convert
-import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
+import com.davioooh.lptools.*
+import com.davioooh.lptools.commands.ChaptersCmd.*
 import com.davioooh.lptools.commons.*
 import com.github.ajalt.clikt.core.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.File
 
 internal class ChaptersCmdTest {
 
@@ -115,6 +113,33 @@ internal class ChaptersCmdTest {
 
     /* create new */
 
-    // TODO implement tests
+    @Test
+    fun `when no chapter number is provided should set the new chapter number to _greatest chapter number + 1_`() {
+        lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
+                .parse(arrayOf("chapters", "new"))
+
+        assertThat(TestConsole.output.toString()).contains("created", buildChapterFileName("03"))
+    }
+
+    @Test
+    fun `when a chapter number is provided should create a new chapter with the given number (if not already used)`() {
+        lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
+                .parse(arrayOf("chapters", "new", "-n5"))
+
+        assertThat(TestConsole.output.toString()).contains("created", buildChapterFileName("05"))
+    }
+
+    @Test
+    fun `when a chapter number is provided should print out an error if the given number is already used`() {
+        lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
+                .parse(arrayOf("chapters", "new", "-n2"))
+
+        assertThat(TestConsole.output.toString()).contains("already exists")
+    }
+
+    private fun createNewCmd(
+            fetchExistingChapterNumbersFun: FetchExistingChapterNumbersFun,
+            createNewChapterFun: CreateNewChapterFun = { _, n, z, _ -> File(buildChapterFileName(n.normalizeChapterNumber(z))) }
+    ) = CreateNew(fetchExistingChapterNumbersFun, createNewChapterFun).apply { context { console = TestConsole } }
 
 }

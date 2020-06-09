@@ -80,11 +80,12 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
             val number = chNumber ?: existingChNumbers.getNextAvailableChapterNumber()
             try {
                 if (existingChNumbers.isChapterNumberAvailable(number)) {
-                    echo("Error: Chapter # $number already exists.", err = true)
-                } else {
                     // TODO improvement: set 1 leading zero by default
                     //  => what if the book contains more than 99 files?
-                    createNewChapter(config.bookFolder!!, number, 1, chTitle)
+                    val newCh = createNewChapter(config.bookFolder!!, number, 1, chTitle)
+                    echo("New chapter file created: $newCh")
+                } else {
+                    echo("Error: Chapter # $number already exists.", err = true)
                 }
             } catch (ex: Exception) {
                 echo("Error: ${ex.message ?: "Cannot create new chapter."}", err = true)
