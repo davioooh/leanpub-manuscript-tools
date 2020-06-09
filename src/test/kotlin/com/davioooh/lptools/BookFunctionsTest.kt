@@ -107,10 +107,10 @@ internal class BookFunctionsTest {
     }
 
 
-    /* */
+    /* Chapter numbers */
 
     @Test
-    fun `should return false when a chapter with the given number already exists`(){
+    fun `should return false when a chapter with the given number already exists`() {
         testBook.createManuscriptFolder()
                 .withFakeChapters(3)
 
@@ -118,11 +118,26 @@ internal class BookFunctionsTest {
     }
 
     @Test
-    fun `should return true when no chapter with the given number exists`(){
+    fun `should return true when no chapter with the given number exists`() {
         testBook.createManuscriptFolder()
                 .withFakeChapters(3)
 
         assertThat(isChapterNumberAvailable(testBook.bookRootFolder, 5)).isTrue()
+    }
+
+    @Test
+    fun `should return 1 when no chapter exists in manuscript folder`() {
+        testBook.createManuscriptFolder()
+
+        assertThat(getNextAvailableChapterNumber(testBook.bookRootFolder)).isEqualTo(1)
+    }
+
+    @Test
+    fun `should return 5 when 4 chapters already exist`() {
+        testBook.createManuscriptFolder()
+                .withFakeChapters(4, MD_EXT)
+
+        assertThat(getNextAvailableChapterNumber(testBook.bookRootFolder)).isEqualTo(5)
     }
 
 }

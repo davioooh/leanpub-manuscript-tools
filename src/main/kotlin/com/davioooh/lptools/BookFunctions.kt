@@ -48,16 +48,22 @@ fun createNewChapterFile(bookRootPath: Path, chNumber: Int, chNumberLeadingZeros
             )
 }
 
-fun isChapterNumberAvailable(bookRootPath: Path, chNumber: Int): Boolean {
+fun isChapterNumberAvailable(bookRootPath: Path, chNumber: Int): Boolean =
+        chNumber !in fetchChapterNumbers(bookRootPath)
+
+fun getNextAvailableChapterNumber(bookRootPath: Path): Int =
+        fetchChapterNumbers(bookRootPath).max()?.plus(1) ?: 1
+
+fun fetchChapterNumbers(bookRootPath: Path): IntArray {
     val chFiles =
             listChapterFilesWithExtension(bookRootPath, TXT_EXT) +
                     listChapterFilesWithExtension(bookRootPath, MD_EXT)
 
-    val chNumbers = chFiles
+    return chFiles
             .map { it.nameWithoutExtension }
             .map { it.removePrefix(CHAPTER_FILE_NAME_PREFIX) }
             .map { it.substringBefore(CHAPTER_FILE_NUM_SEPARATOR) }
             .map { it.toInt() }
-
-    return chNumber !in chNumbers
+            .sorted()
+            .toIntArray()
 }
