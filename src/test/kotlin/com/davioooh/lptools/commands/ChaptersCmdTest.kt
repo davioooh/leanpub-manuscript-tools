@@ -112,4 +112,9 @@ internal class ChaptersCmdTest {
     private fun convertCmd(listChapterFilesWithExt: ListChapterFilesWithExtFun) =
             Convert(listChapterFilesWithExt).apply { context { console = TestConsole } }
 
+
+    /* create new */
+
+    // TODO implement tests
+
 }

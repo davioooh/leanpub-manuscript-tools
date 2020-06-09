@@ -1,9 +1,6 @@
 package com.davioooh.lptools.commands
 
-import com.davioooh.lptools.LPTools
-import com.davioooh.lptools.MD_EXT
-import com.davioooh.lptools.TXT_EXT
-import com.davioooh.lptools.replaceExtensionWith
+import com.davioooh.lptools.*
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.core.NoOpCliktCommand
 import com.github.ajalt.clikt.core.UsageError
@@ -79,9 +76,10 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
         private val chTitle by option("--title", "-t", help = TITLE_OPT_HELP_MSG)
 
         override fun run() {
-            val number = chNumber ?: nextAvailableChapterNumber()
+            val existingChNumbers = fetchExistingChapterNumbers(config.bookFolder!!)
+            val number = chNumber ?: existingChNumbers.getNextAvailableChapterNumber()
             try {
-                if (isChNumberAlreadyUsed(number)) {
+                if (existingChNumbers.isChapterNumberAvailable(number)) {
                     echo("Error: Chapter # $number already exists.", err = true)
                 } else {
                     // TODO improvement: set 1 leading zero by default
@@ -91,14 +89,6 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
             } catch (ex: Exception) {
                 echo("Error: ${ex.message ?: "Cannot create new chapter."}", err = true)
             }
-        }
-
-        private fun nextAvailableChapterNumber(): Int {
-            TODO("findNextChNumber")
-        }
-
-        private fun isChNumberAlreadyUsed(chNumber: Int): Boolean {
-            TODO("isChNumberAlreadyUsed")
         }
 
         companion object {
