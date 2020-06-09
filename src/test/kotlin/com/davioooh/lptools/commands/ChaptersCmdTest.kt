@@ -41,7 +41,7 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(listFilesCmd { listOf() })
                 .parse(arrayOf("chapters", "lf"))
 
-        assertThat(TestConsole.output.toString()).isEmpty()
+        assertThat(TestConsole.output).isEmpty()
     }
 
     @Test
@@ -51,7 +51,7 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(listFilesCmd { fakeTxtFiles })
                 .parse(arrayOf("chapters", "lf"))
 
-        assertThat(TestConsole.output.toString()).isEqualTo(expectedTxtFileNames)
+        assertThat(TestConsole.output).isEqualTo(expectedTxtFileNames)
     }
 
     private fun listFilesCmd(listChapterFiles: ListChapterFilesFun) =
@@ -65,8 +65,8 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(convertCmd { _, _ -> listOf() })
                 .parse(arrayOf("chapters", "cf", "--to=$TXT_EXT"))
 
-        assertThat(TestConsole.output.toString()).contains("0 files")
-        assertThat(TestConsole.output.toString()).doesNotContain("=>")
+        assertThat(TestConsole.output).contains("0 files")
+        assertThat(TestConsole.output).doesNotContain("=>")
     }
 
     @Test
@@ -76,8 +76,8 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(convertCmd { _, _ -> fakeTxtFiles })
                 .parse(arrayOf("chapters", "cf", "--to=$MD_EXT"))
 
-        assertThat(TestConsole.output.toString()).contains("3 files")
-        assertThat(mappingRegex.findAll(TestConsole.output.toString()).asIterable()).hasSize(3)
+        assertThat(TestConsole.output).contains("3 files")
+        assertThat(mappingRegex.findAll(TestConsole.output).asIterable()).hasSize(3)
     }
 
     @Test
@@ -87,8 +87,8 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(convertCmd { _, _ -> fakeMdFiles })
                 .parse(arrayOf("chapters", "cf", "--to=$TXT_EXT"))
 
-        assertThat(TestConsole.output.toString()).contains("3 files")
-        assertThat(mappingRegex.findAll(TestConsole.output.toString()).asIterable()).hasSize(3)
+        assertThat(TestConsole.output).contains("3 files")
+        assertThat(mappingRegex.findAll(TestConsole.output).asIterable()).hasSize(3)
     }
 
     @Test
@@ -118,7 +118,7 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
                 .parse(arrayOf("chapters", "new"))
 
-        assertThat(TestConsole.output.toString()).contains("created", buildChapterFileName("03"))
+        assertThat(TestConsole.output).contains("created", buildChapterFileName("03"))
     }
 
     @Test
@@ -126,7 +126,7 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
                 .parse(arrayOf("chapters", "new", "-n5"))
 
-        assertThat(TestConsole.output.toString()).contains("created", buildChapterFileName("05"))
+        assertThat(TestConsole.output).contains("created", buildChapterFileName("05"))
     }
 
     @Test
@@ -134,7 +134,7 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
                 .parse(arrayOf("chapters", "new", "-n2"))
 
-        assertThat(TestConsole.output.toString()).contains("already exists")
+        assertThat(TestConsole.output).contains("already exists")
     }
 
     private fun createNewCmd(

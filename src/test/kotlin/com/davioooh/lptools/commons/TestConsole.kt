@@ -3,7 +3,9 @@ package com.davioooh.lptools.commons
 import com.github.ajalt.clikt.output.CliktConsole
 
 object TestConsole : CliktConsole {
-    val output = StringBuilder()
+    private val outputSB = StringBuilder()
+    val output: String
+        get() = outputSB.toString()
 
     override fun promptForLine(prompt: String, hideInput: Boolean): String? {
         println("Input : $prompt")
@@ -11,13 +13,12 @@ object TestConsole : CliktConsole {
     }
 
     override fun print(text: String, error: Boolean) {
-        output.append(text)
+        outputSB.append(text)
     }
 
-    override val lineSeparator: String get() = LINE_SEPARATOR
+    override val lineSeparator: String
+        get() = LINE_SEPARATOR
 
-    fun clear() {
-        output.clear()
-    }
+    fun clear() = outputSB.clear()
 
 }
