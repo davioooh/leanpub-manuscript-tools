@@ -41,3 +41,6 @@ fun buildChapterFileName(normalizedChNum: String, normalizedChTitle: String? = n
         "$CHAPTER_FILE_NAME_PREFIX$normalizedChNum" +
                 (if (normalizedChTitle != null) "${CHAPTER_FILE_NUM_SEPARATOR}$normalizedChTitle" else "") +
                 ".$fileExtension"
+
+fun IntArray.isChapterNumberAvailable(chNumber: Int): Boolean = chNumber !in this
+fun IntArray.getNextAvailableChapterNumber(): Int = this.max()?.plus(1) ?: 1

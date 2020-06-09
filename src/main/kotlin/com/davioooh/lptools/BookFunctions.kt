@@ -50,12 +50,6 @@ fun createNewChapterFile(bookRootPath: Path, chNumber: Int, chNumberLeadingZeros
             )
 }
 
-fun isChapterNumberAvailable(bookRootPath: Path, chNumber: Int): Boolean =
-        chNumber !in fetchChapterNumbers(bookRootPath)
-
-fun getNextAvailableChapterNumber(bookRootPath: Path): Int =
-        fetchChapterNumbers(bookRootPath).max()?.plus(1) ?: 1
-
 fun fetchChapterNumbers(bookRootPath: Path): IntArray {
     val chFiles =
             listChapterFilesWithExtension(bookRootPath, TXT_EXT) +
