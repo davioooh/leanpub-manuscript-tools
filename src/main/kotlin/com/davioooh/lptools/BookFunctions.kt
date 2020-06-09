@@ -6,6 +6,8 @@ import java.nio.file.Path
 
 const val MANUSCRIPT_FOLDER = "manuscript"
 
+// TODO improvement: transform all the functions in Path extension fun?
+
 fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<String>): File {
     val bookTxt = resolveManuscriptPath(bookRootPath)
             .resolve("Book.txt")

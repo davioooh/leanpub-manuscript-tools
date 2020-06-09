@@ -7,7 +7,7 @@ import com.davioooh.lptools.createAndWriteLines
 import java.io.File
 import java.nio.file.Path
 
-// TODO enhancement: convert to object?
+// TODO improvement: convert to object?
 class TestBookFolder(val bookRootFolder: Path) {
     private val manuscriptFolder = bookRootFolder.resolve(MANUSCRIPT_FOLDER)
 

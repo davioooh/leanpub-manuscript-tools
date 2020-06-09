@@ -82,7 +82,7 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
                 if (isChNumberAlreadyUsed(number)) {
                     echo("Error: Chapter # $number already exists.", err = true)
                 } else {
-                    // TODO enhancement: set 1 leading zero by default
+                    // TODO improvement: set 1 leading zero by default
                     //  => what if the book contains more than 99 files?
                     createNewChapter(config.bookFolder!!, number, 1, chTitle)
                 }
