@@ -106,4 +106,23 @@ internal class BookFunctionsTest {
         }.isInstanceOf(IllegalStateException::class.java)
     }
 
+
+    /* */
+
+    @Test
+    fun `should return false when a chapter with the given number already exists`(){
+        testBook.createManuscriptFolder()
+                .withFakeChapters(3)
+
+        assertThat(isChapterNumberAvailable(testBook.bookRootFolder, 2)).isFalse()
+    }
+
+    @Test
+    fun `should return true when no chapter with the given number exists`(){
+        testBook.createManuscriptFolder()
+                .withFakeChapters(3)
+
+        assertThat(isChapterNumberAvailable(testBook.bookRootFolder, 5)).isTrue()
+    }
+
 }

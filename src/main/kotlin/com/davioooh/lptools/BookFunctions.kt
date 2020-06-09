@@ -47,3 +47,17 @@ fun createNewChapterFile(bookRootPath: Path, chNumber: Int, chNumberLeadingZeros
                     "# ${chTitle ?: "New Chapter"}"
             )
 }
+
+fun isChapterNumberAvailable(bookRootPath: Path, chNumber: Int): Boolean {
+    val chFiles =
+            listChapterFilesWithExtension(bookRootPath, TXT_EXT) +
+                    listChapterFilesWithExtension(bookRootPath, MD_EXT)
+
+    val chNumbers = chFiles
+            .map { it.nameWithoutExtension }
+            .map { it.removePrefix(CHAPTER_FILE_NAME_PREFIX) }
+            .map { it.substringBefore(CHAPTER_FILE_NUM_SEPARATOR) }
+            .map { it.toInt() }
+
+    return chNumber !in chNumbers
+}
