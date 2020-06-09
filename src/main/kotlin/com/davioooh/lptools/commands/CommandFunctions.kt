@@ -28,3 +28,8 @@ typealias GenerateBookTxtFun = (bookFolder: Path, fileNames: List<String>) -> Fi
  * Create new chapter file.
  */
 typealias CreateNewChapterFun = (bookRootPath: Path, chNumber: Int, chNumberLeadingZeros: Int, chTitle: String?) -> File
+
+/**
+ * Returns an array containing chapter numbers already used in the manuscript.
+ */
+typealias FetchExistingChapterNumbersFun = (bookRootPath: Path) -> IntArray

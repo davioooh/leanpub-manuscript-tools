@@ -67,8 +67,10 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
 
     }
 
-    class CreateNew(private val createNewChapter: CreateNewChapterFun) :
-            CliktCommand(name = CREATE_NEW_CMD_NAME, help = CMD_HELP_MSG) {
+    class CreateNew(
+            private val fetchExistingChapterNumbers: FetchExistingChapterNumbersFun,
+            private val createNewChapter: CreateNewChapterFun
+    ) : CliktCommand(name = CREATE_NEW_CMD_NAME, help = CMD_HELP_MSG) {
         private val config by requireObject<LPTools.Config>()
         private val chNumber by option("--number", "-n", help = NUMBER_OPT_HELP_MSG).int()
                 .validate {
@@ -77,7 +79,7 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
         private val chTitle by option("--title", "-t", help = TITLE_OPT_HELP_MSG)
 
         override fun run() {
-            val number = chNumber ?: findNextChNumber()
+            val number = chNumber ?: nextAvailableChapterNumber()
             try {
                 if (isChNumberAlreadyUsed(number)) {
                     echo("Error: Chapter # $number already exists.", err = true)
@@ -91,7 +93,7 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
             }
         }
 
-        private fun findNextChNumber(): Int {
+        private fun nextAvailableChapterNumber(): Int {
             TODO("findNextChNumber")
         }
 

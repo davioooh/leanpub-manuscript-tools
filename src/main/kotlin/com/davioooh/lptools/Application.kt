@@ -43,7 +43,7 @@ fun main(args: Array<String>) =
                 ChaptersCmd().subcommands(
                         ListFiles(listTxtChapters),
                         Convert(::listChapterFilesWithExtension),
-                        CreateNew(::createNewChapterFile)
+                        CreateNew(::fetchChapterNumbers, ::createNewChapterFile)
                 ),
                 ManuscriptCmd().subcommands(
                         Generate(listTxtChapters, ::generateBookTxtFromFileNames)
