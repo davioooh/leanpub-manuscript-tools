@@ -7,6 +7,7 @@ import com.davioooh.lptools.commands.ManuscriptCmd
 import com.davioooh.lptools.commands.ManuscriptCmd.Generate
 import com.davioooh.lptools.commands.ResolveManuscriptPathFun
 import com.github.ajalt.clikt.core.CliktCommand
+import com.github.ajalt.clikt.core.UsageError
 import com.github.ajalt.clikt.core.findOrSetObject
 import com.github.ajalt.clikt.core.subcommands
 import com.github.ajalt.clikt.parameters.options.default
@@ -21,7 +22,7 @@ class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) : Cli
 
     override fun run() {
         if (resolveManuscriptPath(bookFolder) == null)
-            echo("Error: Invalid book path: cannot find manuscript folder in: $bookFolder", err = true)
+            throw UsageError("Invalid book path: cannot find manuscript folder in: $bookFolder")
         config.bookFolder = bookFolder
     }
 
