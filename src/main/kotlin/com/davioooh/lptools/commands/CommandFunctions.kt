@@ -22,4 +22,14 @@ typealias ListChapterFilesWithExtFun = (bookFolder: Path, ext: String) -> List<F
 /**
  * Generate Book.txt file, given the book root path and chapter file names.
  */
-typealias GenerateBookTxtFun = (Path, List<String>) -> File
+typealias GenerateBookTxtFun = (bookFolder: Path, fileNames: List<String>) -> File
+
+/**
+ * Returns an array containing chapter numbers already used in the manuscript.
+ */
+typealias FetchExistingChapterNumbersFun = (bookRootPath: Path) -> IntArray
+
+/**
+ * Create new chapter file.
+ */
+typealias CreateNewChapterFun = (bookRootPath: Path, chNumber: Int, chNumberLeadingZeros: Int, chTitle: String?) -> File

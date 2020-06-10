@@ -5,6 +5,7 @@ import com.davioooh.lptools.commons.TestBookFolder
 import com.davioooh.lptools.commons.fakeMdFileNamesList
 import com.davioooh.lptools.commons.fakeTxtFileNamesList
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -83,7 +84,6 @@ internal class BookFunctionsTest {
 
         assertThat(newChapter.name).isEqualTo("ch3.txt")
         assertThat(newChapter.readText()).isEqualTo("{#ch-3}$LINE_SEPARATOR# New Chapter$LINE_SEPARATOR")
-
     }
 
     @Test
@@ -94,7 +94,27 @@ internal class BookFunctionsTest {
 
         assertThat(newChapter.name).isEqualTo("ch05_chapter-name.txt")
         assertThat(newChapter.readText()).isEqualTo("{#ch-chapter-name}$LINE_SEPARATOR# Chapter name$LINE_SEPARATOR")
+    }
 
+    @Test
+    fun `should throw exception when file already exists`() {
+        testBook.createManuscriptFolder()
+                .withFakeChapters(3)
+
+        assertThatThrownBy {
+            createNewChapterFile(testBook.bookRootFolder, 2, 1)
+        }.isInstanceOf(IllegalStateException::class.java)
+    }
+
+
+    /* Chapter numbers */
+
+    @Test
+    fun `should return an array with the chapter numbers used in the manuscript`() {
+        testBook.createManuscriptFolder()
+                .withFakeChapters(3)
+
+        assertThat(fetchChapterNumbers(testBook.bookRootFolder)).isEqualTo(intArrayOf(1, 2, 3))
     }
 
 }

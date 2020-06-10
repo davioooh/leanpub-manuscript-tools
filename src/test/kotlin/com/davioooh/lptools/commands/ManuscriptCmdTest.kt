@@ -48,7 +48,7 @@ internal class ManuscriptCmdTest {
         lpToolsManuscriptWith(generateCmd({ listOf() }))
                 .parse(arrayOf("manuscript", "gn", "-b"))
 
-        assertThat(TestConsole.output.toString()).contains("Book.txt not generated")
+        assertThat(TestConsole.output).contains("Book.txt not generated")
     }
 
     @Test
@@ -56,7 +56,7 @@ internal class ManuscriptCmdTest {
         lpToolsManuscriptWith(generateCmd({ fakeTxtFiles }))
                 .parse(arrayOf("manuscript", "gn", "-b"))
 
-        assertThat(TestConsole.output.toString()).contains("Generated:")
+        assertThat(TestConsole.output).contains("Generated:")
     }
 
     private fun generateCmd(

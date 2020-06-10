@@ -1,8 +1,7 @@
 package com.davioooh.lptools
 
 import com.davioooh.lptools.commands.ChaptersCmd
-import com.davioooh.lptools.commands.ChaptersCmd.Convert
-import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
+import com.davioooh.lptools.commands.ChaptersCmd.*
 import com.davioooh.lptools.commands.ListChapterFilesFun
 import com.davioooh.lptools.commands.ManuscriptCmd
 import com.davioooh.lptools.commands.ManuscriptCmd.Generate
@@ -44,7 +43,8 @@ fun main(args: Array<String>) =
         LPTools(::resolveManuscriptPathOrNull).subcommands(
                 ChaptersCmd().subcommands(
                         ListFiles(listTxtChapters),
-                        Convert(::listChapterFilesWithExtension)
+                        Convert(::listChapterFilesWithExtension),
+                        CreateNew(::fetchChapterNumbers, ::createNewChapterFile)
                 ),
                 ManuscriptCmd().subcommands(
                         Generate(listTxtChapters, ::generateBookTxtFromFileNames)

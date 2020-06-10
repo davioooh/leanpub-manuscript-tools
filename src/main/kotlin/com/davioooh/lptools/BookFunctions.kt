@@ -6,6 +6,8 @@ import java.nio.file.Path
 
 const val MANUSCRIPT_FOLDER = "manuscript"
 
+// TODO improvement: transform all the functions in Path extension fun?
+
 fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<String>): File {
     val bookTxt = resolveManuscriptPath(bookRootPath)
             .resolve("Book.txt")
@@ -13,15 +15,7 @@ fun generateBookTxtFromFileNames(bookRootPath: Path, chaptersFileNames: List<Str
 
     if (bookTxt.exists()) bookTxt.delete()
 
-    return bookTxt
-            .apply { createNewFile() }
-            .apply {
-                printWriter().use { writer ->
-                    chaptersFileNames.forEach { fileName ->
-                        writer.println(fileName)
-                    }
-                }
-            }
+    return bookTxt.createAndWriteLines(*chaptersFileNames.toTypedArray())
 }
 
 fun listChapterFilesWithExtension(bookRootPath: Path, extension: String): List<File> =
@@ -42,19 +36,30 @@ fun resolveManuscriptPath(bookRootPath: Path): Path =
                 ?: throw IllegalArgumentException("Invalid book path: cannot find manuscript folder.")
 
 
-fun createNewChapterFile(bookRootPath: Path, number: Int, leadingZeros: Int = 0, title: String? = null): File {
-    val normalizedChNum = number.normalizeChapterNumber(leadingZeros)
-    val normalizedChTitle = title?.normalizeChapterTitle()
+fun createNewChapterFile(bookRootPath: Path, chNumber: Int, chNumberLeadingZeros: Int = 0, chTitle: String? = null): File {
+    val normalizedChNum = chNumber.normalizeChapterNumber(chNumberLeadingZeros)
+    val normalizedChTitle = chTitle?.normalizeChapterTitle()
     val newChFileName = buildChapterFileName(normalizedChNum, normalizedChTitle)
 
     return resolveManuscriptPath(bookRootPath)
             .resolve(newChFileName)
             .toFile()
-            .apply { createNewFile() }
-            .apply {
-                printWriter().use { writer ->
-                    writer.println("{#ch-${normalizedChTitle ?: number}}")
-                    writer.println("# ${title ?: "New Chapter"}")
-                }
-            }
+            .createAndWriteLines(
+                    "{#ch-${normalizedChTitle ?: chNumber}}",
+                    "# ${chTitle ?: "New Chapter"}"
+            )
+}
+
+fun fetchChapterNumbers(bookRootPath: Path): IntArray {
+    val chFiles =
+            listChapterFilesWithExtension(bookRootPath, TXT_EXT) +
+                    listChapterFilesWithExtension(bookRootPath, MD_EXT)
+
+    return chFiles
+            .map { it.nameWithoutExtension }
+            .map { it.removePrefix(CHAPTER_FILE_NAME_PREFIX) }
+            .map { it.substringBefore(CHAPTER_FILE_NUM_SEPARATOR) }
+            .map { it.toInt() }
+            .sorted()
+            .toIntArray()
 }

@@ -1,16 +1,14 @@
 package com.davioooh.lptools.commands
 
-import com.davioooh.lptools.LPTools
-import com.davioooh.lptools.MD_EXT
-import com.davioooh.lptools.TXT_EXT
-import com.davioooh.lptools.commands.ChaptersCmd.Convert
-import com.davioooh.lptools.commands.ChaptersCmd.ListFiles
+import com.davioooh.lptools.*
+import com.davioooh.lptools.commands.ChaptersCmd.*
 import com.davioooh.lptools.commons.*
 import com.github.ajalt.clikt.core.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.io.File
 
 internal class ChaptersCmdTest {
 
@@ -43,7 +41,7 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(listFilesCmd { listOf() })
                 .parse(arrayOf("chapters", "lf"))
 
-        assertThat(TestConsole.output.toString()).isEmpty()
+        assertThat(TestConsole.output).isEmpty()
     }
 
     @Test
@@ -53,7 +51,7 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(listFilesCmd { fakeTxtFiles })
                 .parse(arrayOf("chapters", "lf"))
 
-        assertThat(TestConsole.output.toString()).isEqualTo(expectedTxtFileNames)
+        assertThat(TestConsole.output).isEqualTo(expectedTxtFileNames)
     }
 
     private fun listFilesCmd(listChapterFiles: ListChapterFilesFun) =
@@ -67,8 +65,8 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(convertCmd { _, _ -> listOf() })
                 .parse(arrayOf("chapters", "cf", "--to=$TXT_EXT"))
 
-        assertThat(TestConsole.output.toString()).contains("0 files")
-        assertThat(TestConsole.output.toString()).doesNotContain("=>")
+        assertThat(TestConsole.output).contains("0 files")
+        assertThat(TestConsole.output).doesNotContain("=>")
     }
 
     @Test
@@ -78,8 +76,8 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(convertCmd { _, _ -> fakeTxtFiles })
                 .parse(arrayOf("chapters", "cf", "--to=$MD_EXT"))
 
-        assertThat(TestConsole.output.toString()).contains("3 files")
-        assertThat(mappingRegex.findAll(TestConsole.output.toString()).asIterable()).hasSize(3)
+        assertThat(TestConsole.output).contains("3 files")
+        assertThat(mappingRegex.findAll(TestConsole.output).asIterable()).hasSize(3)
     }
 
     @Test
@@ -89,8 +87,8 @@ internal class ChaptersCmdTest {
         lpToolsChaptersWith(convertCmd { _, _ -> fakeMdFiles })
                 .parse(arrayOf("chapters", "cf", "--to=$TXT_EXT"))
 
-        assertThat(TestConsole.output.toString()).contains("3 files")
-        assertThat(mappingRegex.findAll(TestConsole.output.toString()).asIterable()).hasSize(3)
+        assertThat(TestConsole.output).contains("3 files")
+        assertThat(mappingRegex.findAll(TestConsole.output).asIterable()).hasSize(3)
     }
 
     @Test
@@ -111,5 +109,37 @@ internal class ChaptersCmdTest {
 
     private fun convertCmd(listChapterFilesWithExt: ListChapterFilesWithExtFun) =
             Convert(listChapterFilesWithExt).apply { context { console = TestConsole } }
+
+
+    /* create new */
+
+    @Test
+    fun `when no chapter number is provided should set the new chapter number to _greatest chapter number + 1_`() {
+        lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
+                .parse(arrayOf("chapters", "new"))
+
+        assertThat(TestConsole.output).contains("created", buildChapterFileName("03"))
+    }
+
+    @Test
+    fun `when a chapter number is provided should create a new chapter with the given number (if not already used)`() {
+        lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
+                .parse(arrayOf("chapters", "new", "-n5"))
+
+        assertThat(TestConsole.output).contains("created", buildChapterFileName("05"))
+    }
+
+    @Test
+    fun `when a chapter number is provided should print out an error if the given number is already used`() {
+        lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
+                .parse(arrayOf("chapters", "new", "-n2"))
+
+        assertThat(TestConsole.output).contains("already exists")
+    }
+
+    private fun createNewCmd(
+            fetchExistingChapterNumbersFun: FetchExistingChapterNumbersFun,
+            createNewChapterFun: CreateNewChapterFun = { _, n, z, _ -> File(buildChapterFileName(n.normalizeChapterNumber(z))) }
+    ) = CreateNew(fetchExistingChapterNumbersFun, createNewChapterFun).apply { context { console = TestConsole } }
 
 }

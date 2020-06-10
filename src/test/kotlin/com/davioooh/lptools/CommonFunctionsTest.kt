@@ -52,4 +52,27 @@ internal class CommonFunctionsTest {
                     "Maecenas non tellus turpis. Sed fringilla risus libero, non euismod diam fermentum ut." to "lorem-ipsum-dolor-sit-amet-consectetur-adipiscing-elit-maecenas-vel-diam-at-libero-sodales-venenatis-vivamus-risus-nibh-porta-varius"
     )
 
+
+    /* Chapter numbers */
+
+    @Test
+    fun `should return false when a chapter with the given number already exists`() {
+        assertThat(intArrayOf(1, 2, 3).isChapterNumberAvailable(2)).isFalse()
+    }
+
+    @Test
+    fun `should return true when no chapter with the given number exists`() {
+        assertThat(intArrayOf(1, 2).isChapterNumberAvailable(5)).isTrue()
+    }
+
+    @Test
+    fun `should return 1 when no chapter exists in manuscript folder`() {
+        assertThat(intArrayOf().getNextAvailableChapterNumber()).isEqualTo(1)
+    }
+
+    @Test
+    fun `should return 5 when chapter 4 already exists`() {
+        assertThat(intArrayOf(1,3,4).getNextAvailableChapterNumber()).isEqualTo(5)
+    }
+
 }
