@@ -23,7 +23,7 @@ internal class LPToolsTest {
     }
 
     @Test
-    fun `running with no child command should print help`() {
+    fun `running with no child command or option should print help`() {
         assertThatThrownBy {
             lpTools.parse(arrayOf())
         }.isInstanceOf(PrintHelpMessage::class.java)
