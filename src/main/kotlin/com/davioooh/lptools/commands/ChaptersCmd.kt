@@ -1,10 +1,7 @@
 package com.davioooh.lptools.commands
 
 import com.davioooh.lptools.*
-import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.NoOpCliktCommand
-import com.github.ajalt.clikt.core.UsageError
-import com.github.ajalt.clikt.core.requireObject
+import com.github.ajalt.clikt.core.*
 import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.validate
@@ -79,15 +76,16 @@ class ChaptersCmd : NoOpCliktCommand(name = CHAPTERS_CMD_NAME) {
             val existingChNumbers = fetchExistingChapterNumbers(config.bookFolder!!)
             val number = chNumber ?: existingChNumbers.getNextAvailableChapterNumber()
             val leadingZeros = if (number < 10) 1 else 0 // TODO improvement: what if the book contains more than 99 files?
-            try {
-                if (existingChNumbers.isChapterNumberAvailable(number)) {
+
+            if (existingChNumbers.isChapterNumberAvailable(number)) {
+                try {
                     val newCh = createNewChapter(config.bookFolder!!, number, leadingZeros, chTitle)
                     echo("New chapter file created: $newCh")
-                } else {
-                    echo("Error: Chapter # $number already exists.", err = true)
+                } catch (ex: Exception) {
+                    throw CliktError("Error: Cannot create new chapter.${ex.message?.let { "\n\n$it" }}")
                 }
-            } catch (ex: Exception) {
-                echo("Error: ${ex.message ?: "Cannot create new chapter."}", err = true)
+            } else {
+                throw BadParameterValue("Chapter # $number already exists.")
             }
         }
 

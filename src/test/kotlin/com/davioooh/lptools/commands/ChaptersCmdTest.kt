@@ -131,10 +131,10 @@ internal class ChaptersCmdTest {
 
     @Test
     fun `when a chapter number is provided should print out an error if the given number is already used`() {
-        lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
-                .parse(arrayOf("chapters", "new", "-n2"))
-
-        assertThat(TestConsole.output).contains("already exists")
+        assertThatThrownBy {
+            lpToolsChaptersWith(createNewCmd({ intArrayOf(1, 2) }))
+                    .parse(arrayOf("chapters", "new", "-n2"))
+        }.isInstanceOf(UsageError::class.java)
     }
 
     private fun createNewCmd(

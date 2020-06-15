@@ -22,7 +22,7 @@ class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) : Cli
 
     override fun run() {
         if (resolveManuscriptPath(bookFolder) == null)
-            throw UsageError("Invalid book path: cannot find manuscript folder in: $bookFolder")
+            throw UsageError("Invalid book path: cannot find manuscript folder in: ${bookFolder.toAbsolutePath()}")
         config.bookFolder = bookFolder
     }
 
