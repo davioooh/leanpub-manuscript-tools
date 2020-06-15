@@ -1,4 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.konan.properties.saveToFile
+import java.util.*
 
 plugins {
     kotlin("jvm").version("1.3.72")
@@ -27,6 +29,9 @@ dependencies {
     testRuntimeOnly(junit5("engine"))
 }
 
+fun DependencyHandler.junit5(module: String, version: String? = junitVersion): Any =
+        "org.junit.jupiter:junit-jupiter-$module${version?.let { ":$version" } ?: ""}"
+
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
         jvmTarget = "1.8"
@@ -37,5 +42,15 @@ tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
 
-fun DependencyHandler.junit5(module: String, version: String? = junitVersion): Any =
-        "org.junit.jupiter:junit-jupiter-$module${version?.let { ":$version" } ?: ""}"
+tasks.register("createVersionProps") {
+    dependsOn("processResources")
+    doLast {
+        val p = Properties()
+        p["version"] = project.version.toString()
+        p.saveToFile(org.jetbrains.kotlin.konan.file.File("$buildDir/resources/main/version.properties"))
+    }
+}
+
+tasks.classes {
+    dependsOn("createVersionProps")
+}
