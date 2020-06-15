@@ -4,6 +4,7 @@ import com.davioooh.lptools.LPTools.Config
 import com.davioooh.lptools.commons.*
 import com.github.ajalt.clikt.core.PrintHelpMessage
 import com.github.ajalt.clikt.core.UsageError
+import com.github.ajalt.clikt.core.context
 import com.github.ajalt.clikt.core.subcommands
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -13,8 +14,12 @@ import java.nio.file.Path
 
 internal class LPToolsTest {
 
-    private val lpTools = LPTools { TEST_MANUSCRIPT_PATH }.subcommands(FakeCommand)
-    private val lpToolsWithInvalidBookFolder = LPTools { null }.subcommands(FakeCommand)
+    private val lpTools = LPTools { TEST_MANUSCRIPT_PATH }
+            .apply { context { console = TestConsole } }
+            .subcommands(FakeCommand)
+    private val lpToolsWithInvalidBookFolder = LPTools { null }
+            .apply { context { console = TestConsole } }
+            .subcommands(FakeCommand)
 
 
     @BeforeEach
@@ -27,6 +32,13 @@ internal class LPToolsTest {
         assertThatThrownBy {
             lpTools.parse(arrayOf())
         }.isInstanceOf(PrintHelpMessage::class.java)
+    }
+
+    @Test
+    fun `running with --version option should print version number`() {
+        lpTools.parse(arrayOf("--version"))
+
+        assertThat(TestConsole.output).containsPattern("^v.*$")
     }
 
     @Test
