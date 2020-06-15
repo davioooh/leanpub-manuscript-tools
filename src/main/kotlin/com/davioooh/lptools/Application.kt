@@ -6,24 +6,35 @@ import com.davioooh.lptools.commands.ListChapterFilesFun
 import com.davioooh.lptools.commands.ManuscriptCmd
 import com.davioooh.lptools.commands.ManuscriptCmd.Generate
 import com.davioooh.lptools.commands.ResolveManuscriptPathFun
-import com.github.ajalt.clikt.core.CliktCommand
-import com.github.ajalt.clikt.core.UsageError
-import com.github.ajalt.clikt.core.findOrSetObject
-import com.github.ajalt.clikt.core.subcommands
+import com.github.ajalt.clikt.core.*
 import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.path
 import java.nio.file.Path
+import java.util.*
 
-class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) : CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_EPILOG_MSG) {
+class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) :
+        CliktCommand(name = APP_NAME, help = APP_HELP_MSG, epilog = APP_EPILOG_MSG, invokeWithoutSubcommand = true) {
     private val bookFolder by option("-bf", "--book-folder", help = BOOK_FOLDER_OPT_HELP_MSG).path()
             .default(Path.of("."))
+    private val version by option().flag()
     private val config by findOrSetObject { Config() }
 
     override fun run() {
-        if (resolveManuscriptPath(bookFolder) == null)
-            throw UsageError("Invalid book path: cannot find manuscript folder in: ${bookFolder.toAbsolutePath()}")
-        config.bookFolder = bookFolder
+        if (currentContext.invokedSubcommand == null) {
+            if (version) {
+                val p = Properties()
+                p.load(javaClass.classLoader.getResourceAsStream("version.properties"))
+                echo("v${p["version"]}")
+            } else {
+                throw PrintHelpMessage(this)
+            }
+        } else {
+            if (resolveManuscriptPath(bookFolder) == null)
+                throw UsageError("Invalid book path: cannot find manuscript folder in: ${bookFolder.toAbsolutePath()}")
+            config.bookFolder = bookFolder
+        }
     }
 
     companion object {

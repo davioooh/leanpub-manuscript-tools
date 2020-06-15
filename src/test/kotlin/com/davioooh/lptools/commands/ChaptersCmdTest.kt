@@ -12,15 +12,6 @@ import java.io.File
 
 internal class ChaptersCmdTest {
 
-    private val lpToolsChaptersWithFakeCmd = lpToolsChaptersWith(FakeCommand)
-
-    private fun lpToolsChaptersWith(chaptersSubCmd: CliktCommand) =
-            LPTools { TEST_MANUSCRIPT_PATH }
-                    .subcommands(ChaptersCmd()
-                            .subcommands(chaptersSubCmd)
-                    )
-
-
     @BeforeEach
     fun setup() {
         TestConsole.clear()
@@ -29,9 +20,15 @@ internal class ChaptersCmdTest {
     @Test
     fun `running with no child command should print help`() {
         assertThatThrownBy {
-            lpToolsChaptersWithFakeCmd.parse(arrayOf("chapters"))
+            lpToolsChaptersWith(FakeCommand).parse(arrayOf("chapters"))
         }.isInstanceOf(PrintHelpMessage::class.java)
     }
+
+    private fun lpToolsChaptersWith(chaptersSubCmd: CliktCommand) =
+            LPTools { TEST_MANUSCRIPT_PATH }
+                    .subcommands(ChaptersCmd()
+                            .subcommands(chaptersSubCmd)
+                    )
 
 
     /* list-files */

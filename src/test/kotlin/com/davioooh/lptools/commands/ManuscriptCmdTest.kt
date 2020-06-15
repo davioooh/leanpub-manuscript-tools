@@ -14,15 +14,6 @@ import java.io.File
 
 internal class ManuscriptCmdTest {
 
-    private val lpToolsManuscriptWithFakeCmd = lpToolsManuscriptWith(FakeCommand)
-
-    private fun lpToolsManuscriptWith(manuscriptSubCmd: CliktCommand) =
-            LPTools { TEST_MANUSCRIPT_PATH }
-                    .subcommands(ManuscriptCmd()
-                            .subcommands(manuscriptSubCmd)
-                    )
-
-
     @BeforeEach
     fun setup() {
         TestConsole.clear()
@@ -31,7 +22,7 @@ internal class ManuscriptCmdTest {
     @Test
     fun `running with no child command should print help`() {
         assertThatThrownBy {
-            lpToolsManuscriptWithFakeCmd.parse(arrayOf("manuscript"))
+            lpToolsManuscriptWith(FakeCommand).parse(arrayOf("manuscript"))
         }.isInstanceOf(PrintHelpMessage::class.java)
     }
 
@@ -58,6 +49,12 @@ internal class ManuscriptCmdTest {
 
         assertThat(TestConsole.output).contains("Generated:")
     }
+
+    private fun lpToolsManuscriptWith(manuscriptSubCmd: CliktCommand) =
+            LPTools { TEST_MANUSCRIPT_PATH }
+                    .subcommands(ManuscriptCmd()
+                            .subcommands(manuscriptSubCmd)
+                    )
 
     private fun generateCmd(
             listChapterFiles: ListChapterFilesFun,
