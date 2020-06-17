@@ -38,7 +38,7 @@ class ManuscriptCmd : NoOpCliktCommand(name = MANUSCRIPT_CMD_NAME) {
         }
 
         companion object {
-            const val CMD_HELP_MSG = "" // TODO some helpful message...
+            const val CMD_HELP_MSG = "Generate artifacts from manuscript files."
             const val BOOK_TXT_OPT_HELP_MSG = "Generate Book.txt file."
         }
     }
