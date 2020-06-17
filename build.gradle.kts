@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "com.davioooh.lptools"
-version = "0.1.0-SNAPSHOT"
+version = "0.1.0"
 description = "leanpub-manuscript-tools"
 
 repositories {
