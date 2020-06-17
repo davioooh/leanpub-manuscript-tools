@@ -48,16 +48,24 @@ class LPTools(private val resolveManuscriptPath: ResolveManuscriptPathFun) :
 
 }
 
+fun main(args: Array<String>) =
+        LPTools(::resolveManuscriptPathOrNull)
+                .subcommands(
+                        chaptersCommand,
+                        manuscriptCommand
+                )
+                .main(args)
+
 val listTxtChapters: ListChapterFilesFun = { bookFolder -> listChapterFilesWithExtension(bookFolder, TXT_EXT) }
 
-fun main(args: Array<String>) =
-        LPTools(::resolveManuscriptPathOrNull).subcommands(
-                ChaptersCmd().subcommands(
-                        ListFiles(listTxtChapters),
-                        Convert(::listChapterFilesWithExtension),
-                        CreateNew(::fetchChapterNumbers, ::createNewChapterFile)
-                ),
-                ManuscriptCmd().subcommands(
-                        Generate(listTxtChapters, ::generateBookTxtFromFileNames)
-                )
-        ).main(args)
+val chaptersCommand =
+        ChaptersCmd().subcommands(
+                ListFiles(listTxtChapters),
+                Convert(::listChapterFilesWithExtension),
+                CreateNew(::fetchChapterNumbers, ::createNewChapterFile)
+        )
+
+val manuscriptCommand =
+        ManuscriptCmd().subcommands(
+                Generate(listTxtChapters, ::generateBookTxtFromFileNames)
+        )
