@@ -34,7 +34,7 @@ fun DependencyHandler.junit5(module: String, version: String? = junitVersion): A
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
@@ -53,4 +53,11 @@ tasks.register("createVersionProps") {
 
 tasks.classes {
     dependsOn("createVersionProps")
+}
+
+tasks.jar {
+    manifest {
+        attributes("Main-Class" to "com.davioooh.lptools.ApplicationKt")
+    }
+    from(configurations.compileClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
 }
